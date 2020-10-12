@@ -2,13 +2,13 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Recent &amp; Upcoming Talks on </title>
-    <link>paulblanche.com/talk/</link>
+    <link>paulowhite.github.io/talk/</link>
     <description>Recent content in Recent &amp; Upcoming Talks on </description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-us</language>
     <lastBuildDate>Sun, 01 Jan 2017 00:00:00 +0100</lastBuildDate>
     
-	<atom:link href="paulblanche.com/talk/index.xml" rel="self" type="application/rss+xml" />
+	<atom:link href="paulowhite.github.io/talk/index.xml" rel="self" type="application/rss+xml" />
     
     
   </channel>

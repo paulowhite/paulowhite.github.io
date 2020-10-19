@@ -488,8 +488,10 @@ pre.example {
 }
 
 pre.src {
-    background-color: #ddd;
-    color: #000;
+    /* background-color: #ddd; */
+    background-color: #505050;
+    /* color: #000; */
+    color: #F5F5F5;
     position: relative; 
     /* overflow: visible; */
     overflow: scroll;
@@ -501,7 +503,8 @@ pre.src {
 pre.src:before {
   /* display: none; */
   position: absolute;
-  background-color: white;
+  /* background-color: white; */
+  background-color: grey;
   top: 0px;
   right: 10px;
   padding: 3px;

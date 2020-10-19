@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-10-14 Wed 10:57 -->
+<!-- 2020-10-15 Thu 15:24 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Sickle Cell Disease data</title>
@@ -250,27 +250,28 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org0ace28f">Description</a></li>
-<li><a href="#orga8f07bb">Variables</a></li>
-<li><a href="#org54b0033">Data download</a></li>
-<li><a href="#orgea312a8">Reference</a></li>
+<li><a href="#orgb56fa08">Description</a></li>
+<li><a href="#org55d1e94">Variables</a></li>
+<li><a href="#org78658cd">Data download</a></li>
+<li><a href="#orga88d7a3">Load data into R</a></li>
+<li><a href="#orgb809a66">Reference</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org0ace28f" class="outline-2">
-<h2 id="org0ace28f">Description</h2>
-<div class="outline-text-2" id="text-org0ace28f">
+<div id="outline-container-orgb56fa08" class="outline-2">
+<h2 id="orgb56fa08">Description</h2>
+<div class="outline-text-2" id="text-orgb56fa08">
 <p>
 These data come from a French cross-sectional study. They contain
 observations on n=176 subjects living in Guadeloupe (an overseas
 region of France in the Caribbean). Half of the included subjects had
 Sickle Cell Disease (SCD). The data come from a research project
-describes in the reference below.
+described in the reference below.
 </p>
 
 <p>
 Some studies suggested that subjects suffering from this disease might
-be more likely to have hypotension (i.e. too low pressure). The
+be more likely to have hypotension (i.e. too low blood pressure). The
 research project aimed to compare the blood pressure of those
 suffering from SCD to the others, to describe the associations between
 blood pressure and several other clinical variables and to compare
@@ -280,9 +281,9 @@ these associations in the two populations.
 </div>
 
 
-<div id="outline-container-orga8f07bb" class="outline-2">
-<h2 id="orga8f07bb">Variables</h2>
-<div class="outline-text-2" id="text-orga8f07bb">
+<div id="outline-container-org55d1e94" class="outline-2">
+<h2 id="org55d1e94">Variables</h2>
+<div class="outline-text-2" id="text-org55d1e94">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -360,9 +361,9 @@ these associations in the two populations.
 
 
 
-<div id="outline-container-org54b0033" class="outline-2">
-<h2 id="org54b0033">Data download</h2>
-<div class="outline-text-2" id="text-org54b0033">
+<div id="outline-container-org78658cd" class="outline-2">
+<h2 id="org78658cd">Data download</h2>
+<div class="outline-text-2" id="text-org78658cd">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -393,9 +394,21 @@ these associations in the two populations.
 </div>
 
 
-<div id="outline-container-orgea312a8" class="outline-2">
-<h2 id="orgea312a8">Reference</h2>
-<div class="outline-text-2" id="text-orgea312a8">
+<div id="outline-container-orga88d7a3" class="outline-2">
+<h2 id="orga88d7a3">Load data into R</h2>
+<div class="outline-text-2" id="text-orga88d7a3">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/SCD.rda"</span>))
+head(SCD)
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-orgb809a66" class="outline-2">
+<h2 id="orgb809a66">Reference</h2>
+<div class="outline-text-2" id="text-orgb809a66">
 <p>
 Foucan, Genevier, Bangou, Etienne-Julan, Le Turdu, Salmi. Pression
  artérielle chez les patients drépanocytaires
@@ -405,7 +418,7 @@ Foucan, Genevier, Bangou, Etienne-Julan, Le Turdu, Salmi. Pression
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2020-10-14 Wed 10:57</p>
+<p class="date">Created: 2020-10-15 Thu 15:24</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

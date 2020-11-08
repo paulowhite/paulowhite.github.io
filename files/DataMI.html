@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-11-07 Sat 15:08 -->
+<!-- 2020-11-08 Sun 09:41 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Myocardial Infarction (MI) data</title>
@@ -250,16 +250,17 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgc661e31">Description</a></li>
-<li><a href="#org73e0531">Variable Names</a></li>
-<li><a href="#org9d12601">Download</a></li>
-<li><a href="#orga9da6b7">References</a></li>
+<li><a href="#orga426443">Description</a></li>
+<li><a href="#org426040f">Variable Names</a></li>
+<li><a href="#org1dddd0b">Download</a></li>
+<li><a href="#org928914f">Load data into R</a></li>
+<li><a href="#org2654322">References</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc661e31" class="outline-2">
-<h2 id="orgc661e31">Description</h2>
-<div class="outline-text-2" id="text-orgc661e31">
+<div id="outline-container-orga426443" class="outline-2">
+<h2 id="orga426443">Description</h2>
+<div class="outline-text-2" id="text-orga426443">
 <p>
 The study for which the following data were collected aimed at
 examining whether women who use or have used oral contraceptives are
@@ -275,9 +276,9 @@ diseases.
 
 
 
-<div id="outline-container-org73e0531" class="outline-2">
-<h2 id="org73e0531">Variable Names</h2>
-<div class="outline-text-2" id="text-org73e0531">
+<div id="outline-container-org426040f" class="outline-2">
+<h2 id="org426040f">Variable Names</h2>
+<div class="outline-text-2" id="text-org426040f">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -350,9 +351,9 @@ diseases.
 
 
 
-<div id="outline-container-org9d12601" class="outline-2">
-<h2 id="org9d12601">Download</h2>
-<div class="outline-text-2" id="text-org9d12601">
+<div id="outline-container-org1dddd0b" class="outline-2">
+<h2 id="org1dddd0b">Download</h2>
+<div class="outline-text-2" id="text-org1dddd0b">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -382,9 +383,21 @@ diseases.
 </div>
 </div>
 
-<div id="outline-container-orga9da6b7" class="outline-2">
-<h2 id="orga9da6b7">References</h2>
-<div class="outline-text-2" id="text-orga9da6b7">
+<div id="outline-container-org928914f" class="outline-2">
+<h2 id="org928914f">Load data into R</h2>
+<div class="outline-text-2" id="text-org928914f">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/MI.rda"</span>)) 
+head(MI) 
+</pre>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org2654322" class="outline-2">
+<h2 id="org2654322">References</h2>
+<div class="outline-text-2" id="text-org2654322">
 <p>
 Lafaye de Micheaux P., Drouilhet R., and Liquet B., (2014) The R
 software. Fundamentals of Programming and Statistical Analysis,
@@ -395,7 +408,7 @@ ISBN: 978-1-4614-9019-7.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2020-11-07 Sat 15:08</p>
+<p class="date">Created: 2020-11-08 Sun 09:41</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

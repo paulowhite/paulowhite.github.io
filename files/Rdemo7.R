@@ -41,7 +41,6 @@ Tab1ex
 lm1 <- lm(log10(vitd)~bmigroup,data=irlwomen)
 summary(lm1)
 confint(lm1)
-publish(lm1)
 # compute mean per group
 tapply(log10(irlwomen$vitd), irlwomen$bmigroup, mean)
 # t-test assuming equal variances
@@ -54,18 +53,17 @@ rbind(tapply(log10(irlwomen$vitd), irlwomen$bmigroup, mean),
 lm2 <- lm(log10(vitd) ~  Country + bmigroup, data = irlpolwomen)
 summary(lm2)
 confint(lm2)
-publish(lm2)
 
 # Third model
 lm3 <- lm(log10(vitd) ~ bmi5 + Country, data = irlpolwomen)
 summary(lm3)
 confint(lm3)
-publish(lm3)
+
 
 # Fourth model
 lm4 <- lm(log10(vitd) ~ bmi5 + Country, data = dwomen)
 summary(lm4)
-publish(lm4)
+
 # F-test for comparing countries adjusting on BMI
 anova(lm(log10(vitd) ~ bmi5, data = dwomen),
       lm(log10(vitd) ~ bmi5 + Country, data = dwomen))
@@ -78,7 +76,7 @@ confint(Res4) # print adjusted 95% confidence intervals (min-P method)
 # Fifth model: using interaction
 lm5 <- lm(log10(vitd) ~  Country * bmi5, data = irlpolwomen)
 summary(lm5)
-publish(lm5)
+
 
 
 #---- Model checking plots: ANCOVA example -------

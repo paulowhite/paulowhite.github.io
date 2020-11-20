@@ -1,20 +1,5 @@
 ## * Warming up
 
-## chunk 1
-dW.pp <- read.table("prepost.txt")
-dL.pp <- reshape2::melt(dW.pp, 
-                        id.var = c("subject","treatment","lesion"),
-                        measure.vars = c("visual0","visual4"),
-                        variable.name = "week", 
-                        value.name = "visual")
-dL.pp <- dL.pp[order(dL.pp$subject),]
-## convert week as factor with appropriate values
-dL.pp$week <- factor(dL.pp$week, 
-                     level = c("visual0","visual4"), 
-                     labels = c(0,4))
-## remove row names
-rownames(dL.pp) <- NULL
-
 ## chunk 2
 vec.mean <- c(mean(dW.pp[dW.pp$treatment=="Active","visual0"]),
               mean(dW.pp[dW.pp$treatment=="Active","visual4"]),

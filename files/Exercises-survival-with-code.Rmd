@@ -1,0 +1,182 @@
+
+
+# Lung cancer data
+
+Load the data "lung" from the survival package.
+
+-   Create a new status variable that fits to the standard coding 0 for censored and 1 for event (death).
+-   Compute the Kaplan-Meier estimate of the overall survival curves and plot the results.
+-   Read-off the median survival time from the graph.
+-   Compute the Kaplan-Meier estimate of the survival curves in strata defined by patients gender and visualize the results
+-   Use a Cox regression model to assess if the survival chances are gender dependent.
+-   State the findings in a sentence using hazard ratio with 95% confidence interval and the corresponing p-value.
+-   Adjust the results for patient age and revise the result sentence
+
+```{r   }
+library(survival)
+library(data.table)
+library(Publish)
+data(lung)
+setDT(lung)
+## Create a new status variable
+lung[,Status:=as.numeric(status==2)] 
+```
+
+```{r   }
+## Kaplan-Meier estimate
+library(prodlim)
+KaplanMeierEst = prodlim(Surv(time,Status)~1,data=lung)
+plot(KaplanMeierEst,xlab="Days") 
+```
+
+```{r   }
+## quantiles
+  quantile(KaplanMeierEst) 
+```
+
+```{r   }
+## gender stratified Kaplan-Meier
+KaplanMeierEstStrata = prodlim(Surv(time,Status)~sex,data=lung)
+plot(KaplanMeierEstStrata,xlab="Days",confint=TRUE) 
+```
+
+```{r   }
+## Univariate Cox regression
+coxfit = coxph(Surv(time,Status)~sex,data=lung)
+summary(coxfit) 
+```
+
+```{r   }
+## table format
+publish(coxfit) 
+```
+
+```{r   }
+## change of reference level
+lung[,Sex:=factor(sex,levels=c("2","1"),labels=c("Female","Male"))]
+coxfit2 = coxph(Surv(time,Status)~Sex,data=lung)
+publish(coxfit2) 
+```
+
+```{r   }
+## multiple Cox regression
+coxfit.adj = coxph(Surv(time,Status)~Sex+age,data=lung)
+publish(coxfit.adj) 
+```
+
+
+# Time to pregnancy data
+
+Load the [ttp](https://publicifsv.sund.ku.dk/~tag/Teaching/share/data/ttp.html) data.
+
+-   Analyse the effect of smoking (separately for the woman and the man) on the time-to-pregnancy with Kaplan-Meier curves.
+-   Test the smoking effect with a simple Cox regression model. Write a conclusion sentence which includes the hazard ratio and the corresponding confidence interval and p-value.
+-   Study the interaction of the smoking status of the woman and the smoking status of the man on the time to pregancy. In this model, what is the hazard ratio between a non-smoking couple and a couple where both partners smoke?
+-   Analyse the effect of the woman's alcohol drinking behaviour (''alcWoman'') in a Cox regression analysis. Write a conclusion sentence which includes the hazard ratio and confidence limits.
+-   Categorize the number of beverages per week into three groups:  
+    -   group 1 (''no''): 0 drinks
+    -   group 2 (''moderate''): 1-10 drinks
+    -   group 3 (''high''): 11 or more drinks
+
+Then analyse the effect of this three group variable on the time to pregnancy. Write conclusion sentences which include pairwise comparisons in terms of hazard ratios of all three groups. 
+
+-   Adjust the previous analysis of alcohol effect for possible confounding by smoking and revise the results.
+-   Adjust the previous analysis of alcohol effect for possible confounding by sperm concentration and revise the results. Find possible explanations for why the results differ from the univariate analysis.
+
+```{r   }
+ttp <- fread("./data/ttp.txt")
+setDT(ttp)
+ttp[,smokeWoman:=factor(smokeWoman,levels=c("0","1"),labels=c("No","Yes"))]
+ttp[,smokeMan:=factor(smokeMan,levels=c("0","1"),labels=c("No","Yes"))]
+ttp[,drinkWoman:=factor(cut(alcWoman,c(-1,0,10,100)),labels=c("no","moderate","high"))]
+ttp[,drinkWoman:=factor(drinkWoman,levels=c("no","moderate","high"),labels=c("no","moderate","high"))]
+ttp[,drinkWoman2:=factor(drinkWoman,levels=c("moderate","no","high"))]
+ttp[,coupleSmoking:=factor(1*(smokeWoman=="Yes")+2*(1+(smokeMan=="Yes")),
+                           levels=c(2,3,4,5),
+                           labels=c("none","woman only","man only","both"))] 
+```
+
+```{r   }
+## Effect of smoking (KaplanMeier & logRank)
+## woman smoking
+par(mar=c(10,10,5,5))
+fw <- prodlim(Surv(ttp,status)~smokeWoman,data=ttp)
+plot(fw,
+     type="cuminc",
+     ylab="Probability of getting pregnant",
+     legend.title="Woman smoking",
+     atrisk.title="Woman smoking",
+     legend.x="topleft",
+     atrisk.at=seq(0,200,50),
+     atrisk.pos=-20,
+     xlab="Days") 
+```
+
+```{r   }
+## man smoking
+par(mar=c(10,10,5,5))
+fm <- prodlim(Surv(ttp,status)~smokeMan,data=ttp)
+plot(fm,
+     type="cuminc",
+     ylab="Probability of getting pregnant",
+     legend.x="topleft",
+     legend.title="Man smoking",
+     atrisk.title="Man smoking",
+     atrisk.at=seq(0,200,50),
+     atrisk.pos=-20,
+     xlab="Days") 
+```
+
+```{r   }
+logRankMan <- survdiff(Surv(ttp,status)~smokeMan,data=ttp)
+publish(logRankMan) 
+```
+
+```{r   }
+## Univariate Cox regression: woman
+coxWoman <- coxph(Surv(ttp,status)~smokeWoman,data=ttp)
+publish(coxWoman) 
+```
+
+```{r   }
+## Univariate Cox regression: man
+ coxMan <- coxph(Surv(ttp,status)~smokeMan,data=ttp)
+ publish(coxMan) 
+```
+
+```{r   }
+## Interaction
+ coxInter <- coxph(Surv(ttp,status)~smokeMan*smokeWoman,data=ttp,x=TRUE)
+ summary(coxInter)
+ publish(coxInter) 
+```
+
+```{r   }
+## alcolhol
+ coxDrink <- coxph(Surv(ttp,status)~alcWoman,data=ttp)
+ publish(coxDrink) 
+```
+
+```{r   }
+## alcolhol 
+coxDrink2 <- coxph(Surv(ttp,status)~drinkWoman,data=ttp)
+publish(coxDrink2) 
+```
+
+```{r   }
+## relevel to see the the comparison between moderate and high
+coxDrink3 <- coxph(Surv(ttp,status)~drinkWoman2,data=ttp)
+publish(coxDrink3) 
+```
+
+```{r   }
+## Adjusted analyses
+coxDrink4 <- coxph(Surv(ttp,status)~drinkWoman+smokeWoman,data=ttp)
+publish(coxDrink4) 
+```
+
+```{r   }
+coxDrink5 <- coxph(Surv(ttp,status)~drinkWoman+spermConc,data=ttp)
+publish(coxDrink5) 
+```
+

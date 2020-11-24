@@ -3,11 +3,12 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-11-24 Tue 10:15 -->
+<!-- 2019-11-23 Sat 12:07 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Data from several R packages in text format</title>
+<title>Basic statistics exercises (survival analysis)</title>
 <meta name="generator" content="Org mode" />
+<meta name="author" content="Thomas A. Gerds" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
   .title  { text-align: center;
@@ -192,7 +193,7 @@
   .org-svg { width: 90%; }
   /*]]>*/-->
 </style>
-<link rel="stylesheet" type="text/css" href="./Style2020.css"/>
+<link rel="stylesheet" type="text/css" href="https://publicifsv.sund.ku.dk/~tag/styles/practicals.css" />
 <script type="text/javascript">
 /*
 @licstart  The following is the entire license notice for the
@@ -241,108 +242,89 @@ for the JavaScript code in this tag.
 </script>
 </head>
 <body>
-<div id="preamble" class="status">
-<br>
+<p class="course-menu"><a accesskey="h" href="https://publicifsv.sund.ku.dk/~tag/Teaching/BasicStats/homepage/index.html">Home</a>&nbsp;<a accesskey="l" href="https://publicifsv.sund.ku.dk/~tag/Teaching/BasicStats/homepage/Lecturenotes.html">Lecturenotes</a>&nbsp;<a accesskey="p" href="https://publicifsv.sund.ku.dk/~tag/Teaching/BasicStats/homepage/Practicals.html">Practicals</a>&nbsp;<a accesskey="p" href="https://publicifsv.sund.ku.dk/~tag/Teaching/share/R-tutorials/index.html">R-tutorials</a></p><div id="content">
+<h1 class="title">Basic statistics exercises (survival analysis)</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org980c801">Tutorial</a></li>
+<li><a href="#orgbc9a686">Lung cancer data</a></li>
+<li><a href="#orgd07637c">Time to pregnancy data</a></li>
+</ul>
 </div>
-<div id="content">
-<h1 class="title">Data from several R packages in text format</h1>
+</div>
 <p>
-Below is a table from which datasets from several R packages used in
-the course can be downloaded in text format (csv). This makes the data
-available to non R users.
+You can read and work out the exercises directly in R-studio. Below are links to R-markdown files, 
+the first R-markdown file contains the exercise text and empty R-chunks where you should put the R-code to solve the exercise. 
+The second R-markdown file contains also the R-code that produces the results. It is recommended that you work with the second file when your Rabilities are insufficient, or you want to cheat (there is nothing to be ashamed of in being in this situation).
+In any case, the focus of your work should be on the understanding of the results. A good way for you to check your understanding, is to write down your interpretation of the results in full English sentences
+in a style suitable for a manuscript that is read by your own kind (i.e., try the person sitting next to you).
 </p>
 
+<ul class="org-ul">
+<li><a href="./Exercises-survival.Rmd">Open R-markdown version without R-code</a></li>
+<li><a href="./Exercises-survival-with-code.Rmd">Open R-markdown version with R-code</a></li>
+</ul>
+<div id="outline-container-org980c801" class="outline-2">
+<h2 id="org980c801">Tutorial</h2>
+<div class="outline-text-2" id="text-org980c801">
+<p>
+<a href="https://publicifsv.sund.ku.dk/~tag/Teaching/share/R-tutorials/Advanced-statistics/SurvivalAnalysis.html">Survival analysis</a>
+</p>
+</div>
+</div>
+<div id="outline-container-orgbc9a686" class="outline-2">
+<h2 id="orgbc9a686">Lung cancer data</h2>
+<div class="outline-text-2" id="text-orgbc9a686">
+<p>
+Load the data "lung" from the survival package.
+</p>
 
+<ul class="org-ul">
+<li>Create a new status variable that fits to the standard coding 0 for censored and 1 for event (death).</li>
+<li>Compute the Kaplan-Meier estimate of the overall survival curves and plot the results.</li>
+<li>Read-off the median survival time from the graph.</li>
+<li>Compute the Kaplan-Meier estimate of the survival curves in strata defined by patients gender and visualize the results</li>
+<li>Use a Cox regression model to assess if the survival chances are gender dependent.</li>
+<li>State the findings in a sentence using hazard ratio with 95% confidence interval and the corresponing p-value.</li>
+<li>Adjust the results for patient age and revise the result sentence</li>
+</ul>
+</div>
+</div>
 
-<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<div id="outline-container-orgd07637c" class="outline-2">
+<h2 id="orgd07637c">Time to pregnancy data</h2>
+<div class="outline-text-2" id="text-orgd07637c">
+<p>
+Load the <a href="https://publicifsv.sund.ku.dk/~tag/Teaching/share/data/ttp.html">ttp</a> data.
+</p>
 
+<ul class="org-ul">
+<li>Analyse the effect of smoking (separately for the woman and the man) on the time-to-pregnancy with Kaplan-Meier curves.</li>
+<li>Test the smoking effect with a simple Cox regression model. Write a conclusion sentence which includes the hazard ratio and the corresponding confidence interval and p-value.</li>
+<li>Study the interaction of the smoking status of the woman and the smoking status of the man on the time to pregancy. In this model, what is the hazard ratio between a non-smoking couple and a couple where both partners smoke?</li>
+<li>Analyse the effect of the woman's alcohol drinking behaviour (''alcWoman'') in a Cox regression analysis. Write a conclusion sentence which includes the hazard ratio and confidence limits.</li>
+<li>Categorize the number of beverages per week into three groups:  
+<ul class="org-ul">
+<li>group 1 (''no''): 0 drinks</li>
+<li>group 2 (''moderate''): 1-10 drinks</li>
+<li>group 3 (''high''): 11 or more drinks</li>
+</ul></li>
+</ul>
 
-<colgroup>
-<col  class="org-left" />
-
-<col  class="org-left" />
-
-<col  class="org-left" />
-</colgroup>
-<thead>
-<tr>
-<th scope="col" class="org-left">Name &amp; Download</th>
-<th scope="col" class="org-left">Link to description</th>
-<th scope="col" class="org-left">When  used</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="org-left"><a href="./migraine.csv">migraine</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/DoseFinding/man/migraine.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./Galton.csv">Galton</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/HistData/man/Galton.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./melanoma.csv">melanoma</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/timereg/man/melanoma.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./ToothGrowth.csv">ToothGrowth</a></td>
-<td class="org-left"><a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./Milk.csv">Milk</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/nlme/man/Milk.html">link</a></td>
-<td class="org-left">Lecture 2, Practicals 2</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./alpha.csv">alpha</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/coin/man/alpha.html">link</a></td>
-<td class="org-left">Lecture 2, Practicals 2</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./biom.csv">biom</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/DoseFinding/man/biom.html">link</a></td>
-<td class="org-left">Practicals 2 and 4</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./IBS.csv">IBS</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/DoseFinding/man/IBScovars.html">link</a></td>
-<td class="org-left">Lecture 4</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./barley.csv">barley</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/MASS/man/immer.html">link</a></td>
-<td class="org-left">Lecture 4</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./armd.csv">armd</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/nlmeU/man/armd.wide.html">link</a></td>
-<td class="org-left">Lecture 8, Practicals 8</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./lung.csv">lung</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/survival/man/lung.html">link</a></td>
-<td class="org-left">Practicals 9</td>
-</tr>
-</tbody>
-</table>
+<p>
+Then analyse the effect of this three group variable on the time to pregnancy. Write conclusion sentences which include pairwise comparisons in terms of hazard ratios of all three groups. 
+</p>
+<ul class="org-ul">
+<li>Adjust the previous analysis of alcohol effect for possible confounding by smoking and revise the results.</li>
+<li>Adjust the previous analysis of alcohol effect for possible confounding by sperm concentration and revise the results. Find possible explanations for why the results differ from the univariate analysis.</li>
+</ul>
+</div>
+</div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2020-11-24 Tue 10:15</p>
-<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+Last update: 23 Nov 2019 by Thomas Alexander Gerds.
 </div>
 </body>
 </html>

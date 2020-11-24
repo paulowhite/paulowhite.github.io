@@ -1,0 +1,55 @@
+# Lung cancer data
+
+Load the data "lung" from the survival package.
+
+```{r   }
+library(survival)
+library(data.table)
+library(prodlim)
+data(lung)
+setDT(lung) 
+```
+
+-   Create a new status variable that fits to the standard coding 0 for censored and 1 for event (death).
+-   Compute the Kaplan-Meier estimate of the overall survival curves and plot the results.
+-   Read-off the median survival time from the graph.
+-   Compute the Kaplan-Meier estimate of the survival curves in strata defined by patients gender and visualize the results
+-   Use a Cox regression model to assess if the survival chances are gender dependent.
+-   State the findings in a sentence using hazard ratio with 95% confidence interval and the corresponing p-value.
+-   Adjust the results for patient age and revise the result sentence
+
+```{r   }
+# put your R-code here  
+```
+
+
+# Time to pregnancy data
+
+Load the [ttp](https://publicifsv.sund.ku.dk/~tag/Teaching/share/data/ttp.html) data.
+
+```{r   }
+library(survival)
+library(data.table)
+library(prodlim)
+ttp <- fread("https://publicifsv.sund.ku.dk/~tag/Teaching/share/data/ttp.txt")
+setDT(ttp) 
+```
+
+-   Analyse the effect of smoking (separately for the woman and the man) on the time-to-pregnancy with Kaplan-Meier curves.
+-   Test the smoking effect with a simple Cox regression model. Write a conclusion sentence which includes the hazard ratio and the corresponding confidence interval and p-value.
+-   Study the interaction of the smoking status of the woman and the smoking status of the man on the time to pregancy. In this model, what is the hazard ratio between a non-smoking couple and a couple where both partners smoke?
+-   Analyse the effect of the woman's alcohol drinking behaviour (''alcWoman'') in a Cox regression analysis. Write a conclusion sentence which includes the hazard ratio and confidence limits.
+-   Categorize the number of beverages per week into three groups:  
+    -   group 1 (''no''): 0 drinks
+    -   group 2 (''moderate''): 1-10 drinks
+    -   group 3 (''high''): 11 or more drinks
+
+Then analyse the effect of this three group variable on the time to pregnancy. Write conclusion sentences which include pairwise comparisons in terms of hazard ratios of all three groups. 
+
+-   Adjust the previous analysis of alcohol effect for possible confounding by smoking and revise the results.
+-   Adjust the previous analysis of alcohol effect for possible confounding by sperm concentration and revise the results. Find possible explanations for why the results differ from the univariate analysis.
+
+```{r   }
+# put your R-code here  
+```
+

@@ -3,10 +3,10 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2020-11-24 Tue 10:15 -->
+<!-- 2020-11-24 Tue 10:20 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Data from several R packages in text format</title>
+<title>ttp data: Time to pregnancy</title>
 <meta name="generator" content="Org mode" />
 <style type="text/css">
  <!--/*--><![CDATA[/*><!--*/
@@ -245,14 +245,35 @@ for the JavaScript code in this tag.
 <br>
 </div>
 <div id="content">
-<h1 class="title">Data from several R packages in text format</h1>
+<h1 class="title">ttp data: Time to pregnancy</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org753ae59">Description</a></li>
+<li><a href="#orgeaf635c">Variable names</a></li>
+<li><a href="#orgb211163">Data download</a></li>
+<li><a href="#orgb907078">Load data into R</a></li>
+<li><a href="#orgf2177b1">Reference</a></li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org753ae59" class="outline-2">
+<h2 id="org753ae59">Description</h2>
+<div class="outline-text-2" id="text-org753ae59">
 <p>
-Below is a table from which datasets from several R packages used in
-the course can be downloaded in text format (csv). This makes the data
-available to non R users.
+The file contains data of 423 couples and 13 variables from a study on
+fertility.
 </p>
+</div>
+</div>
 
-
+<div id="outline-container-orgeaf635c" class="outline-2">
+<h2 id="orgeaf635c">Variable names</h2>
+<div class="outline-text-2" id="text-orgeaf635c">
+<p>
+In order from left to right:
+</p>
 
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
@@ -261,87 +282,139 @@ available to non R users.
 <col  class="org-left" />
 
 <col  class="org-left" />
+</colgroup>
+<thead>
+<tr>
+<th scope="col" class="org-left">Variable</th>
+<th scope="col" class="org-left">Explanation (Unit)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td class="org-left">ttp</td>
+<td class="org-left">Time to pregnancy in days</td>
+</tr>
+
+<tr>
+<td class="org-left">status</td>
+<td class="org-left">1 = event: the couple got pregnant at ttp, 0 = right censored: the couple got not pregnant during the follow-up until ttp.</td>
+</tr>
+
+<tr>
+<td class="org-left">bmiWoman</td>
+<td class="org-left">the bmi of the woman</td>
+</tr>
+
+<tr>
+<td class="org-left">bmiMan</td>
+<td class="org-left">the bmi of the man</td>
+</tr>
+
+<tr>
+<td class="org-left">alcWoman</td>
+<td class="org-left">the number of alcoholic beverages the woman was drinking per week</td>
+</tr>
+
+<tr>
+<td class="org-left">alcMan</td>
+<td class="org-left">the number of alcoholic beverages the man was drinking per week</td>
+</tr>
+
+<tr>
+<td class="org-left">smokeWoman</td>
+<td class="org-left">1 = woman was smoking and 0= woman was non-smoking</td>
+</tr>
+
+<tr>
+<td class="org-left">smokeMan</td>
+<td class="org-left">1 = man was smoking and 0= man was non-smoking</td>
+</tr>
+
+<tr>
+<td class="org-left">ageWoman</td>
+<td class="org-left">the age of the woman in years</td>
+</tr>
+
+<tr>
+<td class="org-left">ageMan</td>
+<td class="org-left">the age of the man in years</td>
+</tr>
+
+<tr>
+<td class="org-left">spermConc</td>
+<td class="org-left">Sperm concentration count (million)</td>
+</tr>
+
+<tr>
+<td class="org-left">testosteron</td>
+<td class="org-left">Testosteron level</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgb211163" class="outline-2">
+<h2 id="orgb211163">Data download</h2>
+<div class="outline-text-2" id="text-orgb211163">
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+
+
+<colgroup>
+<col  class="org-left" />
 
 <col  class="org-left" />
 </colgroup>
 <thead>
 <tr>
-<th scope="col" class="org-left">Name &amp; Download</th>
-<th scope="col" class="org-left">Link to description</th>
-<th scope="col" class="org-left">When  used</th>
+<th scope="col" class="org-left">Format</th>
+<th scope="col" class="org-left">Download</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-<td class="org-left"><a href="./migraine.csv">migraine</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/DoseFinding/man/migraine.html">link</a></td>
-<td class="org-left">Lecture 1</td>
+<td class="org-left">text  (csv)</td>
+<td class="org-left"><a href="./ttp.csv">ttp.csv</a></td>
 </tr>
 
 <tr>
-<td class="org-left"><a href="./Galton.csv">Galton</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/HistData/man/Galton.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./melanoma.csv">melanoma</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/timereg/man/melanoma.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./ToothGrowth.csv">ToothGrowth</a></td>
-<td class="org-left"><a href="https://stat.ethz.ch/R-manual/R-devel/library/datasets/html/ToothGrowth.html">link</a></td>
-<td class="org-left">Lecture 1</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./Milk.csv">Milk</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/nlme/man/Milk.html">link</a></td>
-<td class="org-left">Lecture 2, Practicals 2</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./alpha.csv">alpha</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/coin/man/alpha.html">link</a></td>
-<td class="org-left">Lecture 2, Practicals 2</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./biom.csv">biom</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/DoseFinding/man/biom.html">link</a></td>
-<td class="org-left">Practicals 2 and 4</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./IBS.csv">IBS</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/DoseFinding/man/IBScovars.html">link</a></td>
-<td class="org-left">Lecture 4</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./barley.csv">barley</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/MASS/man/immer.html">link</a></td>
-<td class="org-left">Lecture 4</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./armd.csv">armd</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/nlmeU/man/armd.wide.html">link</a></td>
-<td class="org-left">Lecture 8, Practicals 8</td>
-</tr>
-
-<tr>
-<td class="org-left"><a href="./lung.csv">lung</a></td>
-<td class="org-left"><a href="https://rdrr.io/cran/survival/man/lung.html">link</a></td>
-<td class="org-left">Practicals 9</td>
+<td class="org-left">rda (for R)</td>
+<td class="org-left"><a href="./ttp.rda">ttp.rda</a></td>
 </tr>
 </tbody>
 </table>
 </div>
+</div>
+
+
+<div id="outline-container-orgb907078" class="outline-2">
+<h2 id="orgb907078">Load data into R</h2>
+<div class="outline-text-2" id="text-orgb907078">
+<div class="org-src-container">
+<pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/ttp.rda"</span>)) 
+head(ttp) 
+</pre>
+</div>
+</div>
+</div>
+
+
+
+<div id="outline-container-orgf2177b1" class="outline-2">
+<h2 id="orgf2177b1">Reference</h2>
+<div class="outline-text-2" id="text-orgf2177b1">
+<p>
+Design and analysis of time-to-pregnancy. Thomas H Scheike, Niels
+Keiding in Statistical Methods in Medical research, Vol. 15, No. 2,
+127-140 (2006)
+</p>
+</div>
+</div>
+</div>
 <div id="postamble" class="status">
-<p class="date">Created: 2020-11-24 Tue 10:15</p>
+<p class="date">Created: 2020-11-24 Tue 10:20</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

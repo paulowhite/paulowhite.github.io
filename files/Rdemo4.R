@@ -4,6 +4,7 @@ library(DoseFinding)
 library(multcomp)
 library(sandwich)
 
+
 #---- First part, one-way ANOVA --------------
 
 # Load example data 
@@ -77,46 +78,68 @@ rm(list=ls()) # clear all objects from R memory
 
 library(multcomp)
 library(sandwich)
+library(HSAUR2)
 
-# visualize example data
-immer
+# visualize first lines of the example data
+head(weightgain)
 
-# rename data (for simplicity)
-d <- immer
-d$Y <- (d$Y1 + d$Y2)/2 # create outcome as the average of the two years
+# boxplot 
+boxplot(weightgain~source,
+        data=weightgain,
+        col="white",
+        border=c("red","forestgreen"),        
+        xlab="Source of protein",
+        ylab="Weight gain (g)",ylim=c(50,120),xlim=c(0.5,2.5))
 
-
-# stripchart plot: yoeld vs variety
-stripchart(d$Y~d$Var,
-           vertical=TRUE,method="jitter",
+# add the dotplot on top
+stripchart(weightgain~source,
+           data=weightgain,
+           vertical=TRUE,
+           method="jitter",
+           col=c("red","forestgreen"),
            pch=19,
-           xlim=c(0.5,5.5),
-           xlab="Variety",ylab="Yield")
+           axes=TRUE,add=TRUE,ylim=c(50,120))
 
-# Descriptive statistics: mean, sd and n per variety
-tapply(d$Y, d$Var, mean)
-tapply(d$Y, d$Var, sd)
-table(d$Var)
+# Descriptive statistics: mean, sd and n per source of protein
+tapply(weightgain$weightgain, weightgain$source, mean)
+tapply(weightgain$weightgain, weightgain$source, sd)
+table(weightgain$source)
 
-# Two-way anova model
-TwoWayRes <- lm(Y~ Var + Loc, data = d)
+# Two-way anova model (to ajdust on the amount of protein, when comparing source of proteins)
+TwoWayRes <- lm(weightgain~type+source,data=weightgain)
 
 # Print model estimates
 summary(TwoWayRes)
 
+#----
+# For illustrated the comparison of  3 groups instead of 2,
+# we now artificially create additional data: 20 more observations
+# from rats fed with Fish, 10 receive a Low amount of protein, 10 a High amount.
+weightgain2 <- rbind(weightgain,
+                     data.frame(source=factor(rep("Fish",20),levels=c("Beef","Cereal","Fish")),
+                                type=factor(rep(c("Low","High"),each=10),levels=c("High","Low")),
+                                weightgain=c(79, 87, 72, 69, 53, 76, 59, 92, 81, 72,
+                                             92, 71, 102, 62, 70, 90, 80, 95, 84, 105)
+                                ))
+#----
+
 
 # Traditional ANOVA: F-test (assuming homogeneity, i.e. same sd in each group)
-anova(lm(Y~ Loc, data = d), lm(Y~ Var + Loc, data = d))
+Full.lm <- lm(weightgain~source+type, data=weightgain2) # "full" model (same as TwoWayRes, but now fitted with new data)
+Cons.lm <- lm(weightgain~type, data=weightgain2)        # "constrained" model 
+anova(Cons.lm,Full.lm)                                  # F-test (compares the 2 models)
 
-# Recommended analysis: all-pairwise comparisons (ajdusted on Location) with multiple testing adjustment
-TwoWay.mc <- glht(TwoWayRes, linfct = mcp(Var = "Tukey"))
+
+# Recommended analysis: all-pairwise comparisons of source of protein,
+# ajdusted on amount of protein, with multiple testing adjustment.
+TwoWay.mc <- glht(Full.lm, linfct = mcp(source = "Tukey"))
 summary(TwoWay.mc) # print adjusted p-values (min-P method)
 confint(TwoWay.mc) # print adjusted 95% confidence intervals (min-P method)
 
 
 # Default model checking plots
 par(mfrow=c(1,2)) # split plot window in two
-plot(TwoWayRes, which=c(1,2),ask = FALSE,qqline=FALSE,col="blue")
+plot(Full.lm, which=c(1,2),ask = FALSE,qqline=FALSE,col="blue")
 abline(0,1,col="grey",lty=2)
 par(mfrow=c(1,1)) # restore normal plot window
 

@@ -16,6 +16,8 @@ ls() # here you should see the object "th", which contains the data.
 summary(th)
 
 # Create two new variables: the log2 transformed concentration and diameter.
+# This makes sense for our case study, but, in general, do not systematically
+# log-transform without a good reason to do so!
 th$log2conc <- log2(th$concentration)
 th$log2diam <- log2(th$diameter)
 

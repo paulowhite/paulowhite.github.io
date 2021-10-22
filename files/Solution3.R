@@ -130,7 +130,7 @@ z
 #' Yes, we can reject the null hypothesis H0:"the two slopes are equal" because |z|=2.78>1.96. Here the additional computation of the p-value gives P=0.005<5%.
 #' 
 #' ## Question 10
-#' We first compute the 95\% prediction intervals of the mean diastolic pressure given age in the two populations of subjects with and without SCD. 
+#' We first compute the 95\% prediction intervals of MAP given age in the two populations of subjects with and without SCD. 
 ## -----------------------------------------------------------------------------
 # 1. Create dataset with all possible ages (16 to 66)
 d.new <- data.frame(age=seq(16,66,by=1))

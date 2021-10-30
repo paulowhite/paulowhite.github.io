@@ -83,12 +83,12 @@ d$ageGroup <- cut(d$age,
 table(d$ageGroup,useNA="always")
 
 # Example of BMI and SCD
-Tab3 <- table(d$SCD,d$BMIgroup)
+Tab3 <- table(SCD=d$SCD,BMI=d$BMIgroup)
 Tab3
 fisher.test(Tab3)
 
 # Example of BMI and age groups
-Tab4 <- table(d$ageGroup,d$BMIgroup)
+Tab4 <- table(Age=d$ageGroup,BMI=d$BMIgroup)
 Tab4
 fisher.test(Tab4)
 

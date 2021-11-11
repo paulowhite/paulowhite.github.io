@@ -50,6 +50,7 @@ framingham$AgeCutb <- relevel(framingham$AgeCut,"53-56")
 fit3b <- glm(disease~AgeCutb, data=framingham, family=binomial)
 publish(fit3b)
 
+#---
 # Make all pairwise comparison and adjust for multiple testing
 # using the modern min-P method implemented in the multcomp package.
 library(multcomp)  
@@ -61,6 +62,7 @@ Res3 <- glht(fit3, mcp(AgeCut="Tukey"))
 summary(Res3) # summary of the results which provides the adjusted p-values for each comparison
 confint(Res3) # Estimated parameters and 95% CI (log of odds ratio)
 exp(confint(Res3)$confint) # Estimates and 95% CI for odds ratios
+#---
 
 # Fit logistic model with age as a continuous variable (assuming linearity)
 fit5 <- glm(disease~AGE,data=framingham,family=binomial)
@@ -89,6 +91,7 @@ fit6 <- glm(disease ~ AGE + sex, family = binomial, data = framingham)
 summary(fit6)
 publish(fit6)
 
+#----------- Plot Estimated/Predicted risks ----------------
 # Estimated/Predicted risks by the model with predictor variables AGE and sex (without interaction)
 # 1. Create new data "dnew" containing all subjects profile for which we want to make a
 # prediction (here all men and all women of age between 45 and 62)
@@ -117,7 +120,7 @@ fit8 <- glm(disease~sex*Smoke,data=framingham,family=binomial)
 summary(fit8)
 publish(fit8)
 
-
+#-------------- Additional -----------------
 # Below is an additional R code to compare the predicted risks of the model
 # that uses age as a continuous variable (linear) to the predicted risks of
 # the model that uses age as a categorical variable.

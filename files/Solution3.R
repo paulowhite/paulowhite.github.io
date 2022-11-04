@@ -24,7 +24,7 @@ head(d)
 #' We add the new variable MAP to he data and  have a look a the first lines again, just to check. 
 ## -----------------------------------------------------------------------------
 d$MAP <- d$Pdias + (1/3)*(d$Psys-d$Pdias)
-head(SCD)
+head(d)
 
 #' 
 #' 
@@ -46,7 +46,7 @@ summary(lm1)
 confint(lm1)
 
 #' 
-#' The slope estimate of 0.345 means that, when comparing two persons, one being one year older than the other, we estimate that the older person has on average a MAP 0.345 mmHg higher than the younger person. This difference is significantly different from 0, with a p-value <0.001. A 95% confidence interval is (0.206,0.484). For this model the slope does not have a meaningful interpretation: the average arterial pressure (MAP) is not very well defined for someone age 0 year and anyway we do not observe data for subjects younger than 16 and we do not like to extrapolate that much.
+#' The slope estimate of 0.345 means that, when comparing two persons, one being one year older than the other, we estimate that the older person has on average a MAP 0.345 mmHg higher than the younger person. This difference is significantly different from 0, with a p-value <0.001. A 95% confidence interval is (0.206,0.484). For this model the intercept does not have a meaningful interpretation: the average arterial pressure (MAP) is not very well defined for someone age 0 year and anyway we do not observe data for subjects younger than 16 and we do not like to extrapolate that much.
 #' 
 #' 
 #' ## Question 4
@@ -57,7 +57,7 @@ summary(lm2)
 confint(lm2)
 
 #' 
-#' The interpretation of the slope is maybe more interesting. Now the interpretation is: when comparing two persons, one being 10 years older than the other, the older person has on average a MAP 3.45 mmHg higher than the younger person. One year difference is not much and the two persons are too similar (with respect to age) for us to see a **clinically** significant difference in average MAP, but with a ten year difference the results become clearer. Note that the range of ages that we observe is 16-66, so we do not extrapolate as long as we compare two ages ten years different that are both within this range. Note also that, unsurprisingly 10 times the previous estimate of the slope matches the new estimate. This is because the two linear models are mathematically identical, only the results are expressed using two different "units". This explains that the p-values for the slopes remain identical.
+#' The interpretation of the slope is maybe more interesting. Now the interpretation is: when comparing two persons, one being 10 years older than the other, the older person has on average a MAP 3.45 mmHg higher than the younger person. One year difference is not much and the two persons are too similar (with respect to age) for us to see a **clinically** significant difference in average MAP, but with a ten year difference the results become clearer. Note that the range of ages that we observe is 16-66, so we do not extrapolate as long as we compare two ages ten years different that are both within this range. Note also that, unsurprisingly 10 times the previous estimate of the slope matches the new estimate. This is because the two linear models are mathematically identical, only the results are expressed using two different "units". This explains why the p-value for the slope is unchanged.
 #' The intercept (est.=84.5 mmHg, CI= 83.1-86.0) now has a meaningful interpretation: this is the estimated average MAP for a 30 year old person. Note that the (meaningless) p-value for the intercept has changed, which is not surprising. For the first model the (meaningless) null hypothesis was H0: "the MAP at age 0 is in average 0", whereas for the new model it is H0: "the MAP at age 30 is in average 0".  
 #' 
 #' ## Question 5 and 6
@@ -72,7 +72,11 @@ plot(MAP~age,
      xlab="Age",
      pch=1,          # we ask the dots on the plot to be circles
      ylim=c(60,120), # we set the range of the y-axis 
-     xlim=c(16,60))  # we set the range of the x-axis 
+     xlim=c(16,66))  # we set the range of the x-axis
+# Rk: we need to make sure that all values of the two groups
+# can be visible! That is why we set the range of the x-axis
+# and y-axis. Otherwise, the software will make an automatic
+# choice based on the data for SCD=1 only here.
 # Second, we add the blue dots. Note that we now use only 
 # the rows in the data SCD which correspond to SCD=0.
 points(d[d$SCD==0,"age"],d[d$SCD==0,"MAP"],
@@ -98,8 +102,8 @@ legend("bottomright",c("SCD","No SCD"),pch=1:2,col=c("red","blue"),lty=2)
 #' ## Question 7
 ## ---- fig.height=6------------------------------------------------------------
 par(mfcol=c(2,2)) # to split the plot area into 4 areas
-plot(lm10,which=c(1,2),ask=FALSE,main="SCD",col="red")
-plot(lm11,which=c(1,2),ask=FALSE,main="No SCD",col="blue")
+plot(lm10,which=c(1,2),ask=FALSE,main="No SCD",col="blue")
+plot(lm11,which=c(1,2),ask=FALSE,main="SCD",col="red")
 
 #' 
 #' Everything seems fine. For both models the residuals (top plots) seem randomly and symmetrically scattered around the zero-line with the same variability across the range of fitted values. "Symmetrically scattered around the zero-line" suggests that the mean of the residuals is zero for any fitted value (i.e. for any age) as it should. "Same variability across the range of fitted values (i.e. for all ages)" suggests that the standard deviation of the error term is the same for all fitted values/ages as it should.
@@ -159,7 +163,7 @@ plot(MAP~age,
      xlab="Age",
      pch=1,          # we ask the dots on the plot to be circles
      ylim=c(60,120), # we set the range of the y-axis 
-     xlim=c(16,60))  # we set the range of the x-axis 
+     xlim=c(16,66))  # we set the range of the x-axis 
 # Second, we add the blue dots. Note that we now use only 
 # the rows in the data SCD which correspond to SCD=0.
 points(d[d$SCD==0,"age"],d[d$SCD==0,"MAP"],

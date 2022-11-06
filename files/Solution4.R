@@ -21,13 +21,13 @@ data(biom)
 summary(biom)
 
 #' 
-#' From the above summary, we can see that R thinks of the variable dose as a numeric variable. We therefore create a new variable that considers the variabe dose as a factor variable (i.e. a categorical variable). We then print the frequency of each level.
+#' From the above summary, we can see that R thinks of the variable `dose` as a numeric variable. We therefore create a new variable that considers the variabe `dose` as a factor variable (i.e. a categorical variable). We then print the frequency of each level.
 ## -----------------------------------------------------------------------------
 biom$dosefact <- factor(biom$dose)       
 table(biom$dosefact)
 
 #' 
-#' We can now fit an ANOVA model and compute the estimated differences, 95% limits and p-values adjusted for multiple comparisons (four doses are compared to dose 0).
+#' We can now fit an ANOVA model and compute the estimated differences, 95% confidence limits and p-values adjusted for multiple comparisons (four doses are compared to dose 0).
 ## -----------------------------------------------------------------------------
 library(multcomp) # required package
 library(sandwich) # required package
@@ -36,7 +36,7 @@ glht.Dunnett <- glht(fitlm,
                      mcp(dosefact="Dunnett"), # for "many-to-one" comparisons 
                      vcov=vcovHC) # Do not assume equal variances in all groups.
 summary(glht.Dunnett) # print estimated differences and adjusted p-values
-confint(glht.Dunnett) # print 95% limits
+confint(glht.Dunnett) # print 95% confidence limits
 
 #' 
 #' **Note:** by default, the reference level (here dose 0) is the level which is compared to all others. If you want to compare a different level to all others, you can do it by first changing the reference level using the `relevel` function.
@@ -46,7 +46,15 @@ confint(glht.Dunnett) # print 95% limits
 #'  - Bonferroni lead to:  p-value=0.029, confidence limits=[0.045;1.135]
 #'  - min-P approach lead to: p-value=0.024, confidence limits=[0.057;1.122]
 #' 
-#' However, the differences are not very big here and do not change the overall conclusion.
+#' However, the differences are not very big here and do not change the
+#' overall conclusion. 
+#' 
+#' In practise, when we prespecify the choice of the statistical method,
+#' we cannot know for sure whether using the most appropirate method
+#' (e.g. min-P instead of Bonferroni) will make a difference. Sometimes
+#' it does, sometimes it does not. All we can do is to optimize the
+#' **prespecified** choice of the statistical analysis, to have nothing to
+#' regret at the end of the sutdy, after we have analyzed the data.
 #' 
 #' 
 #' ## Question 2
@@ -55,9 +63,9 @@ glht.Tukey <- glht(fitlm, mcp(dosefact="Tukey"), vcov=vcovHC)
 summary(glht.Tukey)
 
 #' 
-#' We can see that the p-values for the comparisons also considered in the previous question are bigger (e.g. dose 0 vs dose 0.6, p-value is now 0.048, whereas it was 0.029). This makes perfect sense. When we consider more comparisons we need to adjust the p-value more, i.e. we need to inflate the p-value more to compensate for the additional risk of false positive results. Although here the comparison between dose 0 and 0.6 is still significant, this is now "borderline".
+#' We can see that the p-values for the comparisons also considered in the previous question are larger (e.g. dose 0 vs dose 0.6, p-value is now 0.048, whereas it was 0.029). This makes perfect sense. When we consider more comparisons we need to adjust the p-values more, i.e. we need to inflate the p-values more to compensate for the additional risk of false positive results. Although here the comparison between dose 0 and 0.6 is still significant, this is now "borderline".
 #' 
-#' **Take home message**: do not make more comparisons than necessary! (For the main analysis). Indeed, either you will rigorously adjust for multiple testing but then you will have lower chances of true positive findings or you will not rigorously adjust for multiple testing but you will have a higher risk of false positive findings. 
+#' **Take home message**: do not make more comparisons than necessary! (For the main analysis, for which you aim to control the risk of false positive finding). Indeed, either you will rigorously adjust for multiple testing but then you will have lower chances of true positive findings or you will not rigorously adjust for multiple testing but you will have a higher risk of false positive findings. 
 #' 
 ## -----------------------------------------------------------------------------
 confint(glht.Tukey)
@@ -123,7 +131,7 @@ summary(lmfit)
 #' 
 #' **Remember:** here the intercept is the mean in the reference group and the other estimates should be interpreted as estimated differences to the reference group.
 #' 
-#' In the output, we can also read "Residual standard error: 8.781". This means that the estimate of the standard **deviation** of the "error term" is  8.78. For interpreting this value, we can for example say the following. For any subject picked up at random in a population similar to that from which our sample was drawn, 95 times out of 100, his/her MAP will be observed not further away than 2 times 8.78 (i.e. 17.56) from the mean values estimated for his/her BMI group. This interpretation relies on the normal distribution of the "error term". But even if this assumption does not hold, this value 8.7 still gives us some information about the spread of MAP observations around the mean. For instance, we can still  make the same interpretation but replacing "95 times out of 100" by "at least 75 times out of 100" in the above sentence.
+#' In the output, we can also read "Residual standard error: 8.781". This means that the estimate of the standard **deviation** of the "error term" is  8.78. For interpreting this value, we can for example say the following. For any subject picked up at random in a population similar to that from which our sample was drawn, 95 times out of 100, his/her MAP will be observed not further away than 2 times 8.78 (i.e. 17.56) from the mean values estimated for his/her BMI group. This interpretation relies on the normal distribution of the "error term". But even if this assumption does not hold, this value 8.7 still gives us some information about the spread of MAP observations around the mean. For instance, we can still  make the same interpretation but replacing "95 times out of 100" by "at least 75 times out of 100" in the above sentence (because of the Chebyshev's inequality).
 #' 
 #' We now compute the (sample) mean of MAP in each BMI group.
 ## -----------------------------------------------------------------------------
@@ -168,13 +176,13 @@ permsrplot <- function(x, y, ...) {
 #' 
 #' ## Question 4
 #' 
-#' From the output in question 2, we can read "F-statistic: 25.93 on 3 and 172 DF,  p-value: 6.896e-14". this means that the p-value of the F-test is p-value < 0.0001. Hence we conclude to a significant association between BMI and MAP.
+#' From the output in question 2, we can read "F-statistic: 25.93 on 3 and 172 DF,  p-value: 6.896e-14". This means that the p-value of the F-test is p-value < 0.0001. Hence we conclude to a significant association between BMI and MAP.
 #' 
 #' We could have preferred the F-test to the min-P approach here because of the following. The F-test approach is a "good-old" method which is commonly used and considered by many as a simpler approach to the min-P approach. As statistical guidelines of many medical journals (e.g. European Heart Journal) suggest to use methods ‘as simple as possible, but as sophisticated as needed’, this can favor the F-test here. Indeed, although we can reasonably argue that the min-P approach is often more appropriate when the aim is to report the comparisons between all or some of the groups, this was not the aim here. Here we just wanted to investigate an "overall association" and nothing else. Hence the min-P approach is somehow less attractive.
 #' 
 #' 
 #' ## Question 5
-#' Some people sometimes recommend to use BMI as a continuous variable instead of categorizing it, for the statistical analysis. Some go as far as saying that this is always a "better and more powerful" approach. This statement is, however, seen by many as being a bit naive. One main disadvantage of using BMI as a continuous variable is that it is then not so easy to fit a "good" model. Assuming linearity does not seem realistic, neither from a clinical point of view nor from what the data suggest. Hence more complicated modeling approaches would be needed (e.g. using splines), which are beyond the scope of this course. These approaches all have pros and cons... 
+#' Some people sometimes recommend to use BMI as a continuous variable instead of categorizing it, for the statistical analysis. Some go as far as saying that this is always a "better and more powerful" approach. This statement is, however, seen by many as being a bit naive. One main disadvantage of using BMI as a continuous variable is that it is then not so easy to fit a "good" model (especially if sticking to the fundamental principle of prespecification). Assuming linearity does not seem realistic, neither from a clinical point of view nor from what the data suggest. Hence more complicated modeling approaches would be needed (e.g. using splines), which are beyond the scope of this course. These approaches all have pros and cons... 
 #' 
 #' # Part 2
 #' 

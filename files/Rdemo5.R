@@ -2,10 +2,43 @@ rm(list=ls()) # clear all objects from R memory
 
 library(Publish)
 
+
+load(url("http://paulblanche.com/files/dalteparin.rda")) 
+head(dalteparin) 
+
+# Cross tabulate Treatment and Outcome
+Tab1 <- table(dalteparin$outcome,dalteparin$trt)
+Tab1
+
+# Same table with a better  ordering of the levels (from best to worst)
+Tab1 <- Tab1[c("Healed", "Improved", "Unchanged","Impaired", "Amputation"),]
+Tab1
+
+# How to make the same table "from scratch"
+Tab1 <- cbind(c(14,15,7,5,2),
+              c(9,11,9,5,8))
+rownames(Tab1) <- c("Healed","Improved","Unchanged","Impaired","Amputation")
+colnames(Tab1) <- c("Dalteparin","Placebo")
+Tab1
+
+
+# create a binary outcome from the categorical outcome
+dalteparin$Y <- factor(dalteparin$outcome,
+                       levels=c("Healed", "Improved", "Unchanged","Impaired", "Amputation"),
+                       labels=c("better", "better", "worse","worse", "worse"))
+# 2 by 2 table
+TabMain <- table(Treatment=dalteparin$trt,Outcome=dalteparin$Y)
+TabMain
+
+# Same with new order of rows and columns
+TabMain <- TabMain[2:1,2:1]
+TabMain
+
 # exact confidence interval
 binom.test(x=7,n=43)
 
 # compute "by hand" the confidence interval with the normal approximation
+# FOR ACADEMIC PURPOSE ONLY! (see below function table2x2 below for getting the same result more easily)
 x <- 7
 n <- 43
 hatp <- x/n
@@ -14,14 +47,6 @@ upper <- hatp + 1.96*sqrt(hatp*(1-hatp)/n)
 Results <- c(Est=hatp,lower=lower,upper=upper)
 Results
 round(Results*100,1)
-
-# Dalteparin example data
-Tab1 <- cbind(c(14,15,7,5,2),
-                    c(9,11,9,5,8)
-                    )
-rownames(Tab1) <- c("Healed","Improved","Unchanged","Impaired","Amputation")
-colnames(Tab1) <- c("Dalteparin","Placebo")
-Tab1
 
 # Transform to proportion (per treatment group)
 prop.table(Tab1,margin=2)
@@ -54,13 +79,13 @@ colnames(Tab2) <- c("Worse","Better")
 # Compute risk difference, RR  and OR, together with 95% CI,
 table2x2(Tab2,stats = c("table", "rd", "rr", "or"))
 
-# Fisher's exact test
+# Fisher's exact test; always works (default choice!)
 fisher.test(Tab2)
 
-# Pearson's Chi-square test
+# Pearson's Chi-square test; fine with large samples
 chisq.test(Tab2,correct=FALSE)
 
-# Pearson's Chi-square test with Yates' continuity correction
+# Pearson's Chi-square test with Yates' continuity correction; NO LONGER USEFUL...
 chisq.test(Tab2,correct=TRUE)
 
 

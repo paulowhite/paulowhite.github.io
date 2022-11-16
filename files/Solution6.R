@@ -62,7 +62,7 @@ publish(fit1)
 #' The above results are actually just another way of looking at the following frequency table.
 #' 
 ## -----------------------------------------------------------------------------
-table(MI$Smoke,MI$mi)
+table(Smoke=MI$Smoke,MI=MI$mi)
 
 #' 
 #' For instance the odds ratio (and log odds ratio) to compare the risk of MI between women who are current smokers and women who have never smoked can be found as follows:
@@ -120,7 +120,7 @@ publish(fit2)
 #' 
 #' First we look at the counts.
 ## -----------------------------------------------------------------------------
-Tab1 <- table(MI$oc,MI$Smoke)
+Tab1 <- table(OC=MI$oc,Smoke=MI$Smoke)
 Tab1
 
 #' 
@@ -151,7 +151,7 @@ publish(fit3)
 #'  - one is a former smoker, the other has never smoked, both have the same use of oral contaceptives (whatever it is, either they both use them or both do not use them), the risk of MI of the former smoker is significantly higher (OR=5.32, 95% CI=[2.96;9.56], p-value<0.0001).
 #' 
 #' 
-#' According to the first item above, the odds ratio which compares the risk of users of oral contraceptives to that of non users is **the same whatever the smoking status/history**. This seems to be inconsistent with what previous studies suggested, i.e. "*oral contraceptives could increase the risk of MI differently for smokers, non-smokers and former smokers*". What is important to notice is that this inconsistency between previous results and ours is not driven by the data but, instead, by the modeling assumption of no interaction. In other words, our modeling assumption does not allow us to estimate a different association between MI and use of oral contraceptive for women who smoke, do not smoke or have never smoked, although we should, according to previous studies.  
+#' According to the first item above, the odds ratio which compares the risk of users of oral contraceptives to that of non users is **the same whatever the smoking status/history**. This seems to be inconsistent with what previous studies suggested, i.e. "*oral contraceptives could increase the risk of MI differently for smokers, non-smokers and former smokers*". What is important to notice is that this inconsistency between previous results and ours is not driven by the data but, instead, by the modeling assumption of no interaction. In other words, our modeling assumption does not allow us to estimate a different association between MI and use of oral contraceptive for women who smoke, do not smoke or have never smoked, although we should, according to previous studies.
 #' 
 #' ## Question 5
 #' 
@@ -242,7 +242,9 @@ boxplot(MI$age~interaction(MI$oc,MI$Smoke),
 #' 
 #' We first create add and to the data a categorical variable **AgeGroup**, which is a categorical variable for age, with three groups 15-39, 40-55 and 55 or above. We further use the **table()** function to read the number of observations in each group.
 ## -----------------------------------------------------------------------------
-MI$AgeGroup <- cut(MI$age,breaks=c(15,40,55,100),include.lowest=TRUE)
+MI$AgeGroup <- cut(MI$age,
+                   breaks=c(15,40,55,100),
+                   include.lowest=TRUE)
 table(MI$AgeGroup)
 
 #' 

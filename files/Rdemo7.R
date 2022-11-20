@@ -40,11 +40,23 @@ Tab1ex
 # Frist model
 lm1 <- lm(log10(vitd)~bmigroup,data=irlwomen)
 summary(lm1)
-confint(lm1)
+confint(lm1) 
+
+# Home-made function to extract and format the main results of a linear model
+# It returns the Estimated coefficients, 95%-CIs and p-values.
+FormatResLm <- function(fit){
+ cbind.data.frame(round(cbind(Est=fit$coef,confint(fit)),2),
+                  'p-value'=format.pval(summary(fit)$coefficients[,"Pr(>|t|)"],
+                                        digits=3))
+}
+FormatResLm(lm1)
+
 # compute mean per group
 tapply(log10(irlwomen$vitd), irlwomen$bmigroup, mean)
+
 # t-test assuming equal variances
 t.test(log10(irlwomen$vitd) ~ irlwomen$bmigroup,var.equal=TRUE) 
+
 # compare mean and median per group
 rbind(tapply(log10(irlwomen$vitd), irlwomen$bmigroup, mean),
       tapply(log10(irlwomen$vitd), irlwomen$bmigroup, median))
@@ -59,8 +71,7 @@ lm3 <- lm(log10(vitd) ~ bmi5 + Country, data = irlpolwomen)
 summary(lm3)
 confint(lm3)
 
-
-# Fourth model
+# Fourth model (more than 2 countries)
 lm4 <- lm(log10(vitd) ~ bmi5 + Country, data = dwomen)
 summary(lm4)
 
@@ -73,10 +84,19 @@ Res4 <- glht(lm4, mcp(Country="Tukey")) # all-pairwise comparisons
 summary(Res4) # print adjusted p-values (min-P method)
 confint(Res4) # print adjusted 95% confidence intervals (min-P method)
 
-# Fifth model: using interaction
+# Fifth model: using interaction 
 lm5 <- lm(log10(vitd) ~  Country * bmi5, data = irlpolwomen)
 summary(lm5)
 
+# Sixth model: using interaction
+lm6 <- lm(log10(vitd) ~  Country * bmigroup, data = irlpolwomen)
+summary(lm6)
+
+# Same ofter changing the reference level
+irlpolwomen$bmigroup2 <- relevel(irlpolwomen$bmigroup,ref="1")
+lm6b <- lm(log10(vitd) ~  Country * bmigroup2, data = irlpolwomen)
+summary(lm6b)
+round(confint(lm6b),2)
 
 
 #---- Model checking plots: ANCOVA example -------

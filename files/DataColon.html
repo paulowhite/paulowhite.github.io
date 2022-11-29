@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2022-11-28 Mon 14:52 -->
+<!-- 2022-11-29 Tue 09:59 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Colon cancer data</title>
@@ -250,18 +250,18 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgdbcfd1c">Description</a></li>
-<li><a href="#org0db64ad">Variables</a></li>
-<li><a href="#orgb1a7a59">Data download</a></li>
-<li><a href="#org00c2eb7">Load data into R</a></li>
-<li><a href="#orgc016c6d">References</a></li>
-<li><a href="#org061040e">Source</a></li>
+<li><a href="#org82bcdf5">Description</a></li>
+<li><a href="#orgb562e59">Variables</a></li>
+<li><a href="#orgd16928f">Data download</a></li>
+<li><a href="#orgef63e9a">Load data into R</a></li>
+<li><a href="#org6f5036a">References</a></li>
+<li><a href="#orge43f8b3">Source</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgdbcfd1c" class="outline-2">
-<h2 id="orgdbcfd1c">Description</h2>
-<div class="outline-text-2" id="text-orgdbcfd1c">
+<div id="outline-container-org82bcdf5" class="outline-2">
+<h2 id="org82bcdf5">Description</h2>
+<div class="outline-text-2" id="text-org82bcdf5">
 <p>
 These are data from one of the first successful trials of
 adjuvant chemotherapy for colon cancer. Levamisole is a
@@ -280,9 +280,9 @@ recorded. See e.g. Moertel et al. (1995) for details.
 </div>
 
 
-<div id="outline-container-org0db64ad" class="outline-2">
-<h2 id="org0db64ad">Variables</h2>
-<div class="outline-text-2" id="text-org0db64ad">
+<div id="outline-container-orgb562e59" class="outline-2">
+<h2 id="orgb562e59">Variables</h2>
+<div class="outline-text-2" id="text-orgb562e59">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -320,17 +320,17 @@ recorded. See e.g. Moertel et al. (1995) for details.
 
 <tr>
 <td class="org-left">obstruct</td>
-<td class="org-left">obstruction of colon by tumour</td>
+<td class="org-left">obstruction of colon by tumor (1=yes,0=no)</td>
 </tr>
 
 <tr>
 <td class="org-left">perfor</td>
-<td class="org-left">perforation of colon</td>
+<td class="org-left">perforation of colon   (1=yes,0=no)</td>
 </tr>
 
 <tr>
 <td class="org-left">adhere</td>
-<td class="org-left">adherence to nearby organs</td>
+<td class="org-left">adherence to nearby organs  (1=yes,0=no)</td>
 </tr>
 
 <tr>
@@ -355,7 +355,7 @@ recorded. See e.g. Moertel et al. (1995) for details.
 
 <tr>
 <td class="org-left">node4</td>
-<td class="org-left">more than 4 positive lymph nodes</td>
+<td class="org-left">more than 4 positive lymph nodes (1=yes,0=no)</td>
 </tr>
 
 <tr>
@@ -365,7 +365,7 @@ recorded. See e.g. Moertel et al. (1995) for details.
 
 <tr>
 <td class="org-left">status</td>
-<td class="org-left">1=recurrence, 2= death (without recurrence) and 0=censored</td>
+<td class="org-left">indicates what is observed at "time": 1=recurrence, 2= death (without recurrence) and 0=censored</td>
 </tr>
 
 <tr>
@@ -375,7 +375,7 @@ recorded. See e.g. Moertel et al. (1995) for details.
 
 <tr>
 <td class="org-left">statusD</td>
-<td class="org-left">1=death, 0=censored</td>
+<td class="org-left">indicates what is observed at "timeD": 1=death, 0=censored</td>
 </tr>
 
 <tr>
@@ -385,7 +385,7 @@ recorded. See e.g. Moertel et al. (1995) for details.
 
 <tr>
 <td class="org-left">statusR</td>
-<td class="org-left">1=recurrence, 0=censored (i.e. no recurrence observed with timeR days)</td>
+<td class="org-left">indicates what is observed at "timeR": 1=recurrence, 0=censored (i.e. no recurrence observed within "timeR" days)</td>
 </tr>
 </tbody>
 </table>
@@ -393,9 +393,9 @@ recorded. See e.g. Moertel et al. (1995) for details.
 </div>
 
 
-<div id="outline-container-orgb1a7a59" class="outline-2">
-<h2 id="orgb1a7a59">Data download</h2>
-<div class="outline-text-2" id="text-orgb1a7a59">
+<div id="outline-container-orgd16928f" class="outline-2">
+<h2 id="orgd16928f">Data download</h2>
+<div class="outline-text-2" id="text-orgd16928f">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -426,9 +426,9 @@ recorded. See e.g. Moertel et al. (1995) for details.
 </div>
 
 
-<div id="outline-container-org00c2eb7" class="outline-2">
-<h2 id="org00c2eb7">Load data into R</h2>
-<div class="outline-text-2" id="text-org00c2eb7">
+<div id="outline-container-orgef63e9a" class="outline-2">
+<h2 id="orgef63e9a">Load data into R</h2>
+<div class="outline-text-2" id="text-orgef63e9a">
 <div class="org-src-container">
 <pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/colon2.rda"</span>)) 
 head(colon2)
@@ -439,9 +439,9 @@ head(colon2)
 
 
 
-<div id="outline-container-orgc016c6d" class="outline-2">
-<h2 id="orgc016c6d">References</h2>
-<div class="outline-text-2" id="text-orgc016c6d">
+<div id="outline-container-org6f5036a" class="outline-2">
+<h2 id="org6f5036a">References</h2>
+<div class="outline-text-2" id="text-org6f5036a">
 <p>
 Moertel et al. "Fluorouracil plus levamisole as effective adjuvant
 therapy after resection of stage III colon carcinoma: a final report."
@@ -450,9 +450,9 @@ Annals of internal medicine 122.5 (1995): 321-326.
 </div>
 </div>
 
-<div id="outline-container-org061040e" class="outline-2">
-<h2 id="org061040e">Source</h2>
-<div class="outline-text-2" id="text-org061040e">
+<div id="outline-container-orge43f8b3" class="outline-2">
+<h2 id="orge43f8b3">Source</h2>
+<div class="outline-text-2" id="text-orge43f8b3">
 <p>
 The data are a reformatted version of the 'colon' data from the R
 package
@@ -462,7 +462,7 @@ package
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2022-11-28 Mon 14:52</p>
+<p class="date">Created: 2022-11-29 Tue 09:59</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

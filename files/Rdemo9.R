@@ -1,5 +1,10 @@
 rm(list=ls()) # clear all objects from R memory
 
+# load the relevant packages
+library(survival)
+library(prodlim)
+library(survRM2)
+
 # load  data of first case study (pregnancy in subfertile women) 
 load(url("http://paulblanche.com/files/subfertile.rda"))
 head(subfertile)

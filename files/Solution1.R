@@ -43,7 +43,7 @@ table(d$SCD)
 ## ---- fig.height=5------------------------------------------------------------
 boxplot(d$Psys~factor(d$SCD,levels=c(0,1),labels=c("no","yes")),
                       xlab="Sickle Cell Disease",
-                      ylab="Diastolic pressure (mmHg)")
+                      ylab="Systolic pressure (mmHg)")
 
 #' 
 #' 

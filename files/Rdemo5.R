@@ -117,6 +117,8 @@ Tab4 <- table(Age=d$ageGroup,BMI=d$BMIgroup)
 Tab4
 fisher.test(Tab4)
 
+#------ Power and sample size calculation -------
+
 # Sample size calculation example
 power.prop.test(p1 = 0.5, p2 = 0.25, power=0.8)
 
@@ -125,3 +127,12 @@ power.prop.test(n=58, p1 = 0.35, p2 = 0.5)
 
 # Least detectable difference example
 power.prop.test(n=75, p1 = 0.8, power=0.8)
+
+
+#------ Analysis of paired binary data ----------------------
+
+library(exact2x2)                     # load a useful package
+tab <- rbind(c(1,19),c(2,2))          # 2 by 2 table
+mcnemar.exact(tab)                    # exact McNemar test
+binom.test(x=sum(tab[,2]),n=sum(tab)) # sensitivity for PCR-test (95%-CI)
+binom.test(x=sum(tab[2,]),n=sum(tab)) # sensitivity for BC-test  (95%-CI)

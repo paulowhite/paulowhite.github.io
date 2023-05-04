@@ -1,0 +1,609 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<!-- 2023-05-04 Thu 15:50 -->
+<meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Homework assignment &#x2013; Basic Statistics</title>
+<meta name="generator" content="Org mode" />
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  .title  { text-align: center;
+             margin-bottom: .2em; }
+  .subtitle { text-align: center;
+              font-size: medium;
+              font-weight: bold;
+              margin-top:0; }
+  .todo   { font-family: monospace; color: red; }
+  .done   { font-family: monospace; color: green; }
+  .priority { font-family: monospace; color: orange; }
+  .tag    { background-color: #eee; font-family: monospace;
+            padding: 2px; font-size: 80%; font-weight: normal; }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .org-right  { margin-left: auto; margin-right: 0px;  text-align: right; }
+  .org-left   { margin-left: 0px;  margin-right: auto; text-align: left; }
+  .org-center { margin-left: auto; margin-right: auto; text-align: center; }
+  .underline { text-decoration: underline; }
+  #postamble p, #preamble p { font-size: 90%; margin: .2em; }
+  p.verse { margin-left: 3%; }
+  pre {
+    border: 1px solid #ccc;
+    box-shadow: 3px 3px 3px #eee;
+    padding: 8pt;
+    font-family: monospace;
+    overflow: auto;
+    margin: 1.2em;
+  }
+  pre.src {
+    position: relative;
+    overflow: visible;
+    padding-top: 1.2em;
+  }
+  pre.src:before {
+    display: none;
+    position: absolute;
+    background-color: white;
+    top: -10px;
+    right: 10px;
+    padding: 3px;
+    border: 1px solid black;
+  }
+  pre.src:hover:before { display: inline;}
+  /* Languages per Org manual */
+  pre.src-asymptote:before { content: 'Asymptote'; }
+  pre.src-awk:before { content: 'Awk'; }
+  pre.src-C:before { content: 'C'; }
+  /* pre.src-C++ doesn't work in CSS */
+  pre.src-clojure:before { content: 'Clojure'; }
+  pre.src-css:before { content: 'CSS'; }
+  pre.src-D:before { content: 'D'; }
+  pre.src-ditaa:before { content: 'ditaa'; }
+  pre.src-dot:before { content: 'Graphviz'; }
+  pre.src-calc:before { content: 'Emacs Calc'; }
+  pre.src-emacs-lisp:before { content: 'Emacs Lisp'; }
+  pre.src-fortran:before { content: 'Fortran'; }
+  pre.src-gnuplot:before { content: 'gnuplot'; }
+  pre.src-haskell:before { content: 'Haskell'; }
+  pre.src-hledger:before { content: 'hledger'; }
+  pre.src-java:before { content: 'Java'; }
+  pre.src-js:before { content: 'Javascript'; }
+  pre.src-latex:before { content: 'LaTeX'; }
+  pre.src-ledger:before { content: 'Ledger'; }
+  pre.src-lisp:before { content: 'Lisp'; }
+  pre.src-lilypond:before { content: 'Lilypond'; }
+  pre.src-lua:before { content: 'Lua'; }
+  pre.src-matlab:before { content: 'MATLAB'; }
+  pre.src-mscgen:before { content: 'Mscgen'; }
+  pre.src-ocaml:before { content: 'Objective Caml'; }
+  pre.src-octave:before { content: 'Octave'; }
+  pre.src-org:before { content: 'Org mode'; }
+  pre.src-oz:before { content: 'OZ'; }
+  pre.src-plantuml:before { content: 'Plantuml'; }
+  pre.src-processing:before { content: 'Processing.js'; }
+  pre.src-python:before { content: 'Python'; }
+  pre.src-R:before { content: 'R'; }
+  pre.src-ruby:before { content: 'Ruby'; }
+  pre.src-sass:before { content: 'Sass'; }
+  pre.src-scheme:before { content: 'Scheme'; }
+  pre.src-screen:before { content: 'Gnu Screen'; }
+  pre.src-sed:before { content: 'Sed'; }
+  pre.src-sh:before { content: 'shell'; }
+  pre.src-sql:before { content: 'SQL'; }
+  pre.src-sqlite:before { content: 'SQLite'; }
+  /* additional languages in org.el's org-babel-load-languages alist */
+  pre.src-forth:before { content: 'Forth'; }
+  pre.src-io:before { content: 'IO'; }
+  pre.src-J:before { content: 'J'; }
+  pre.src-makefile:before { content: 'Makefile'; }
+  pre.src-maxima:before { content: 'Maxima'; }
+  pre.src-perl:before { content: 'Perl'; }
+  pre.src-picolisp:before { content: 'Pico Lisp'; }
+  pre.src-scala:before { content: 'Scala'; }
+  pre.src-shell:before { content: 'Shell Script'; }
+  pre.src-ebnf2ps:before { content: 'ebfn2ps'; }
+  /* additional language identifiers per "defun org-babel-execute"
+       in ob-*.el */
+  pre.src-cpp:before  { content: 'C++'; }
+  pre.src-abc:before  { content: 'ABC'; }
+  pre.src-coq:before  { content: 'Coq'; }
+  pre.src-groovy:before  { content: 'Groovy'; }
+  /* additional language identifiers from org-babel-shell-names in
+     ob-shell.el: ob-shell is the only babel language using a lambda to put
+     the execution function name together. */
+  pre.src-bash:before  { content: 'bash'; }
+  pre.src-csh:before  { content: 'csh'; }
+  pre.src-ash:before  { content: 'ash'; }
+  pre.src-dash:before  { content: 'dash'; }
+  pre.src-ksh:before  { content: 'ksh'; }
+  pre.src-mksh:before  { content: 'mksh'; }
+  pre.src-posh:before  { content: 'posh'; }
+  /* Additional Emacs modes also supported by the LaTeX listings package */
+  pre.src-ada:before { content: 'Ada'; }
+  pre.src-asm:before { content: 'Assembler'; }
+  pre.src-caml:before { content: 'Caml'; }
+  pre.src-delphi:before { content: 'Delphi'; }
+  pre.src-html:before { content: 'HTML'; }
+  pre.src-idl:before { content: 'IDL'; }
+  pre.src-mercury:before { content: 'Mercury'; }
+  pre.src-metapost:before { content: 'MetaPost'; }
+  pre.src-modula-2:before { content: 'Modula-2'; }
+  pre.src-pascal:before { content: 'Pascal'; }
+  pre.src-ps:before { content: 'PostScript'; }
+  pre.src-prolog:before { content: 'Prolog'; }
+  pre.src-simula:before { content: 'Simula'; }
+  pre.src-tcl:before { content: 'tcl'; }
+  pre.src-tex:before { content: 'TeX'; }
+  pre.src-plain-tex:before { content: 'Plain TeX'; }
+  pre.src-verilog:before { content: 'Verilog'; }
+  pre.src-vhdl:before { content: 'VHDL'; }
+  pre.src-xml:before { content: 'XML'; }
+  pre.src-nxml:before { content: 'XML'; }
+  /* add a generic configuration mode; LaTeX export needs an additional
+     (add-to-list 'org-latex-listings-langs '(conf " ")) in .emacs */
+  pre.src-conf:before { content: 'Configuration File'; }
+
+  table { border-collapse:collapse; }
+  caption.t-above { caption-side: top; }
+  caption.t-bottom { caption-side: bottom; }
+  td, th { vertical-align:top;  }
+  th.org-right  { text-align: center;  }
+  th.org-left   { text-align: center;   }
+  th.org-center { text-align: center; }
+  td.org-right  { text-align: right;  }
+  td.org-left   { text-align: left;   }
+  td.org-center { text-align: center; }
+  dt { font-weight: bold; }
+  .footpara { display: inline; }
+  .footdef  { margin-bottom: 1em; }
+  .figure { padding: 1em; }
+  .figure p { text-align: center; }
+  .equation-container {
+    display: table;
+    text-align: center;
+    width: 100%;
+  }
+  .equation {
+    vertical-align: middle;
+  }
+  .equation-label {
+    display: table-cell;
+    text-align: right;
+    vertical-align: middle;
+  }
+  .inlinetask {
+    padding: 10px;
+    border: 2px solid gray;
+    margin: 10px;
+    background: #ffffcc;
+  }
+  #org-div-home-and-up
+   { text-align: right; font-size: 70%; white-space: nowrap; }
+  textarea { overflow-x: auto; }
+  .linenr { font-size: smaller }
+  .code-highlighted { background-color: #ffff00; }
+  .org-info-js_info-navigation { border-style: none; }
+  #org-info-js_console-label
+    { font-size: 10px; font-weight: bold; white-space: nowrap; }
+  .org-info-js_search-highlight
+    { background-color: #ffff00; color: #000000; font-weight: bold; }
+  .org-svg { width: 90%; }
+  /*]]>*/-->
+</style>
+<link rel="stylesheet" type="text/css" href="./Style2020.css"/>
+<script type="text/javascript">
+/*
+@licstart  The following is the entire license notice for the
+JavaScript code in this tag.
+
+Copyright (C) 2012-2019 Free Software Foundation, Inc.
+
+The JavaScript code in this tag is free software: you can
+redistribute it and/or modify it under the terms of the GNU
+General Public License (GNU GPL) as published by the Free Software
+Foundation, either version 3 of the License, or (at your option)
+any later version.  The code is distributed WITHOUT ANY WARRANTY;
+without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE.  See the GNU GPL for more details.
+
+As additional permission under GNU GPL version 3 section 7, you
+may distribute non-source (e.g., minimized or compacted) forms of
+that code without the copy of the GNU GPL normally required by
+section 4, provided you include this license notice and a URL
+through which recipients can access the Corresponding Source.
+
+
+@licend  The above is the entire license notice
+for the JavaScript code in this tag.
+*/
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+</head>
+<body>
+<div id="preamble" class="status">
+<br>
+</div>
+<div id="content">
+<h1 class="title">Homework assignment &#x2013; Basic Statistics</h1>
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#org4055df5">Aim: Why this homework?</a></li>
+<li><a href="#orgb747395">Overview of the tasks: What to do and when?</a>
+<ul>
+<li><a href="#org1029dcd">Task 1: prepare a talk and a one-page summary</a></li>
+<li><a href="#org8c1e72b">Task 2: read two one-page summaries and prepare yourself to ask questions</a></li>
+<li><a href="#org6600492">Task 3: give a talk and ask  questions</a></li>
+</ul>
+</li>
+<li><a href="#org2b42cd2">More Details for tasks 1 and 2</a>
+<ul>
+<li><a href="#org04c4839">Details for preparing the presentation</a></li>
+<li><a href="#org6b0616e">Details for the one-page summary</a></li>
+<li><a href="#orgff8eb50">Details for Task 2: how to read summaries from others and prepare yourself to ask questions</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div id="outline-container-org4055df5" class="outline-2">
+<h2 id="org4055df5">Aim: Why this homework?</h2>
+<div class="outline-text-2" id="text-org4055df5">
+<p>
+The aims of this homework are:
+</p>
+<ul class="org-ul">
+<li>to make you practice statistics in the context of your own research</li>
+<li>provide you with feedback</li>
+<li>and make you further learn how to best use statistics via examples from others.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-orgb747395" class="outline-2">
+<h2 id="orgb747395">Overview of the tasks: What to do and when?</h2>
+<div class="outline-text-2" id="text-orgb747395">
+</div>
+<div id="outline-container-org1029dcd" class="outline-3">
+<h3 id="org1029dcd">Task 1: prepare a talk and a one-page summary</h3>
+<div class="outline-text-3" id="text-org1029dcd">
+<p>
+<b>When?</b>: between course day 5 (3/05) and one day after course day 9 (18/05)
+</p>
+
+<p>
+<b>What?</b> Prepare a short presentation (8 mins) which you will present
+on the last course day (24/05) as well as a one-page description of
+your talk (see details below).
+</p>
+</div>
+</div>
+
+
+<div id="outline-container-org8c1e72b" class="outline-3">
+<h3 id="org8c1e72b">Task 2: read two one-page summaries and prepare yourself to ask questions</h3>
+<div class="outline-text-3" id="text-org8c1e72b">
+<p>
+<b>When?</b>: between two days after day 9 (19/05) and day 10 (24/05)
+</p>
+
+<p>
+<b>What?</b> Read two one-page summaries from other students and prepare
+ yourself to ask at least one question about each of the two
+ corresponding talks. You will ask your questions on day 10 (24/05),
+ just after the end the talks, to kick off a plenary discussion with
+ the other students and the teacher. The question must relate to
+ statistics (see details below).
+</p>
+</div>
+</div>
+
+
+
+<div id="outline-container-org6600492" class="outline-3">
+<h3 id="org6600492">Task 3: give a talk and ask  questions</h3>
+<div class="outline-text-3" id="text-org6600492">
+<p>
+<b>When?</b>: day 10 (24/05)
+</p>
+
+<p>
+<b>What?</b> As a presenter, give your talk and engage in a discussion with
+ the audience. As an attendee, immediately after a talk for which you
+ have read a one-page summary, ask a question. You should listen
+ carefully during the two talks for which you have read a one-page
+ summary. Then do your best to ask an interesting question.  After any
+ other talk, feel welcome to contribute to the plenary discussions
+ that follow the first questions and answers (see more details below).
+</p>
+</div>
+</div>
+</div>
+
+
+<div id="outline-container-org2b42cd2" class="outline-2">
+<h2 id="org2b42cd2">More Details for tasks 1 and 2</h2>
+<div class="outline-text-2" id="text-org2b42cd2">
+</div>
+<div id="outline-container-org04c4839" class="outline-3">
+<h3 id="org04c4839">Details for preparing the presentation</h3>
+<div class="outline-text-3" id="text-org04c4839">
+<p>
+<b>Important:</b>
+</p>
+
+<ul class="org-ul">
+<li>You should use <b>data</b> from your own PhD project or data related to
+your PhD project obtained from your colleagues or supervisor.</li>
+</ul>
+
+
+<ul class="org-ul">
+<li>As an alternative to presenting a data analysis, you can present a
+<b>thought-through sample size calculation</b>, power calculation or
+least detectable difference calculation. The calculation must
+relate to an experiment or a clinical trial that you are planning
+as part of your PhD project. This should be done in agreement with
+the course organizer. Please let him know ASAP, <b>at the latest on
+course day 7</b> (10/05), if this is your preferred choice.</li>
+</ul>
+
+
+<p>
+<b>Main instructions:</b>
+</p>
+<ol class="org-ol">
+<li>Prepare at most 6 slides which you can <b><b>realistically</b></b> present in about 8 minutes.</li>
+<li>Hand in your presentation by email to <code>pabl at sund dot ku dot dk</code>
+until <b>May 18, 2023</b>.</li>
+<li>The presentation has to include elements of each of the following
+sections (except if you present a calculation for planning an
+experiment)
+<ul class="org-ul">
+<li><i>Research question</i> &#x2013; including a definition of the background population.</li>
+<li><i>Material/Data</i></li>
+<li><i>Statistical methods</i> &#x2013; can be short but should cover all the
+statistical methods that are used to produce the <i>Results</i>.</li>
+<li><i>Results</i>: 
+<ul class="org-ul">
+<li>At least one descriptive statistic but can be more,
+e.g., a table with descriptive statistics for several variables
+(by groups).</li>
+<li>At least a graph which either shows the raw data or a result of
+the statistical analysis, as appropriate.</li>
+<li>At least one conclusion sentence based on statistical inference of the data which includes a confidence
+interval and p-value.</li>
+</ul></li>
+</ul></li>
+<li>Clearly define the study population, outcome and
+exposures/treatments/groups you compare. For instance, please
+explain how and when an outcome is measured or a treatment is
+admninistered.</li>
+<li>Prepare your talk such that <b>the audience should be able to follow your talk,
+enjoy it and learn from it.</b></li>
+<li><b><b>Keep in mind that this course is about statistics</b></b>. Do not spend
+more time than necessary on the biological/medical background which
+motivates the research question and statistical analyses. Instead,
+keep more time to discuss why the statistical analyses you chose
+seem appropriate for your research question and data, that is, for
+your specific context.</li>
+<li>Figures and tables are only acceptable if they come with a proper caption (legend).</li>
+<li>Hand in your presentation in pdf format, if possible. A Powerpoint
+or html format is also accepted if necessary, but should be
+avoided, if possible. The file has to be named
+<code>Talk2023-your-full-name.pdf</code> or <code>.ppt</code> or <code>.html</code>.</li>
+<li>If you cannot attend the last course day send an email to <code>pabl at
+   sund dot ku dot dk</code> ASAP. This is important since you cannot pass
+the course in that case, unless we find a good reason and a
+suitable alternative to make an exception.</li>
+</ol>
+
+<p>
+<b>Further instructions:</b>
+</p>
+
+
+<ul class="org-ul">
+<li>The statistical part does not have to be complex. Keep it simple,
+so that you are sure that you understand the methods that you
+apply. Choose a research question which requires a complex analysis
+only if you feel that you can explain everything within the time
+limits.</li>
+
+<li>You do not have to use all the variables of your data set and you
+are allowed to subset the data to simplify the problem. To simplify
+the analysis you may also categorize some continuous variables.</li>
+
+<li>The result section must include at least one p-value and one
+confidence interval. However, note that to achieve this it is
+sufficient to perform a single comparison of an outcome variable
+between two groups.</li>
+
+<li>All decimal numbers should be in English notation and suitably rounded.</li>
+
+<li>The methods section must include the units of the variables and the
+name of the statistical method which is used to calculate the p-value.</li>
+
+<li>For all results that are shown in your presentation you should be
+able to explain what they mean.</li>
+
+<li>Presenting screenshots is allowed but should be avoided, if
+possible.</li>
+
+<li>Do not put more material on your slides than necessary.</li>
+</ul>
+</div>
+</div>
+
+
+<div id="outline-container-org6b0616e" class="outline-3">
+<h3 id="org6b0616e">Details for the one-page summary</h3>
+<div class="outline-text-3" id="text-org6b0616e">
+<p>
+The length should not exceed one page. The document should provide a
+ good overview of the presentation, especially (concise) information
+ about:
+</p>
+<ol class="org-ol">
+<li><i>Research question</i></li>
+<li><i>Data</i></li>
+<li><i>Statistical methods</i></li>
+<li><i>Results</i></li>
+</ol>
+<p>
+Keep in mind that the better you describe your work, the more likely
+you will receive good feedback. Read the instructions on how to read
+summaries from others before writing your own one-page summary (see
+below). It should help you to write your own.
+</p>
+
+<p>
+The document should also include:
+</p>
+
+<ol class="org-ol">
+<li>The tile of your talk</li>
+<li>Your name</li>
+<li>Your affiliation</li>
+<li>Four keywords: two about your research topic and two about the statistical methods</li>
+</ol>
+
+<p>
+Please send the document in pdf format. The file has to be named <code>Summary2023-your-full-name.pdf</code>. 
+</p>
+</div>
+</div>
+
+<div id="outline-container-orgff8eb50" class="outline-3">
+<h3 id="orgff8eb50">Details for Task 2: how to read summaries from others and prepare yourself to ask questions</h3>
+<div class="outline-text-3" id="text-orgff8eb50">
+<p>
+You are not expected to be familiar with the research described in the
+two one-page summaries that you will read. You are not expected to
+spend a lot of time to try to become familiar with it. However, please
+be curious and use a few minutes to read and learn, e.g. from
+wikipedia, if the one-page summaries contain keywords that you do not
+understand.
+</p>
+
+<p>
+You do not necessarily need to have a question ready to ask before you
+listen to the talks on day 10 (24/05). However, reading the one-page
+summaries should give you the opportunity to listen to the talks well
+prepared. To best prepare yourself for listening to the talks, you are
+<b>strongly encouraged to re-read</b> the course material <b>about the
+statistical methods mentioned in the one-page summaries</b>. It is
+important that you remember the main ideas of "When, Why and How?" to
+use the specific statistical methods named in the talks. This will
+help you to ask interesting questions about the use of the statistical
+methods, in the specific context presented in the talks.
+</p>
+
+
+
+<p>
+This course is about statistics and your <b>questions must relate to
+ statistics</b>. It can be about the following (but not necessarily):
+</p>
+
+
+<ul class="org-ul">
+<li>the <b>interpretation</b> of the statistical results: Do they answer the
+research question(s) well? Why? Are the main conclusions well
+aligned with the statistical results? Not too strong, not too weak?
+Could the results be sensitive to important assumptions? How does
+the background knowledge help with the interpretation of the
+statistical results?</li>
+</ul>
+
+
+<ul class="org-ul">
+<li>the choice of the <b>statistical method</b>: Is there a good match
+between the research question, the available data and the choice of
+the statistical method?  Are you aware of any alternative methods
+that could have been considered, their pros and cons? Do the
+assumptions of the statistical methods seem sensible here? Have you
+considered any data transformation, e.g. log-transformation of the
+outcome?  Why preferring an unadjusted to an adjusted analysis (or
+the other way around) in this context?  Does a multiple testing
+adjustment seem useful here, why?</li>
+</ul>
+
+
+<ul class="org-ul">
+<li><b>prespecified vs post-hoc analyses</b>: Were the analyses prespecified
+or post-hoc here, why?  Are the conclusions tuned accordingly?</li>
+</ul>
+
+
+<ul class="org-ul">
+<li>the <b>presentation</b> of the statistical results: Could the results
+(tables, plots, conclusions sentences) be presented differently, to
+facilitate their interpretation and communication?</li>
+</ul>
+
+
+<ul class="org-ul">
+<li>the <b>data</b> being presented: Could the data have possibly been
+collected in a different way (better/worse)? Are the data
+representative of the population of interest, for the research
+question? Is this of major / minor importance here, for the
+interpretation of the results? Do the data seem particularly
+challenging to "best" analyze? Could some of the pragmatic choices,
+to make the analysis "simple", be made differently?</li>
+</ul>
+
+
+<p>
+<b>Further information:</b>
+</p>
+
+<ul class="org-ul">
+<li>Please be respectful and constructive when asking your questions.</li>
+
+<li>Do your best to ask a question that you find interesting yourself
+and that could likely be interesting to others too.</li>
+
+<li>Try to formulate your question clearly. The question should not
+only be clear to you and the presenter, but also to the rest of the
+audience.</li>
+
+<li>Don't be afraid of asking a "stupid" question. The experience of
+the course organizer is that your questions are rarely "stupid". In
+any case, that would not be a big problem. The teacher will
+contribute to the discussion and do his best to make the discussion
+interesting, pleasant and instructive, whatever happens.</li>
+</ul>
+</div>
+</div>
+</div>
+</div>
+<div id="postamble" class="status">
+<p class="date">Created: 2023-05-04 Thu 15:50</p>
+<p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
+</div>
+</body>
+</html>

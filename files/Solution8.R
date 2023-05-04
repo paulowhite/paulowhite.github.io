@@ -1,315 +1,212 @@
-## * Warming up
+### exercise-repMes.R --- 
+##----------------------------------------------------------------------
+## Author: Brice Ozenne
+## Created: nov 27 2022 (23:10) 
+## Version: 
+## Last-Updated: maj  4 2023 (12:52) 
+##           By: Brice Ozenne
+##     Update #: 4
+##----------------------------------------------------------------------
+## 
+### Commentary: 
+## 
+### Change Log:
+##----------------------------------------------------------------------
+## 
+### Code:
 
-## chunk 2
-vec.mean <- c(mean(dW.pp[dW.pp$treatment=="Active","visual0"]),
-              mean(dW.pp[dW.pp$treatment=="Active","visual4"]),
-              mean(dW.pp[dW.pp$treatment=="Placebo","visual0"]),
-              mean(dW.pp[dW.pp$treatment=="Placebo","visual4"]))
-vec.mean
-
-## chunk 3
-vec.treatment <- c("Active","Active","Placebo","Placebo")
-vec.week <- c("0","4","0","4")
-dftable <- data.frame(treatment = vec.treatment,
-                      week = vec.week,
-                      mu = vec.mean)
-dftable
-
-## chunk 4
-aggregate(visual ~ week + treatment,
-          data = dL.pp, FUN = "mean")
-
-## chunk 5
-library(data.table)
-dtL.pp <- as.data.table(dL.pp)
-dtL.pp[,list(mu=mean(visual), sigma=sd(visual)), 
-                 by = c("treatment","week")]
-
-## chunk 6
-dW.pp$visualDiff04 <- dW.pp$visual4 - dW.pp$visual0
-c(mean(dW.pp[dW.pp$treatment=="Active","visualDiff04"]),
-  mean(dW.pp[dW.pp$treatment=="Placebo","visualDiff04"]))
-
-## chunk 7
-mu.active <- dftable[dftable$treatment=="Active","mu"]
-mu.placebo <- dftable[dftable$treatment=="Placebo","mu"]
-
-## chunk 8
-change <- c(Placebo = diff(mu.active),
-            Active = diff(mu.placebo))
-change
-
-## chunk 9
-as.double(change["Active"]-change["Placebo"])
-
-## chunk 10
-dW.ppA <- dW.pp[dW.pp$treatment=="Active",]
-dW.ppP <- dW.pp[dW.pp$treatment=="Placebo",]
-
-## chunk 11
-dW.pp$treatment <- relevel(factor(dW.pp$treatment),"Placebo")
-
-## chunk 12
-library(nlme)
-e.t.test <- t.test(x=dW.ppP$visualDiff04, y=dW.ppA$visualDiff04)
-e.lm <- lm(visualDiff04 ~ treatment, data = dW.pp)
-e.gls <- gls(visualDiff04 ~ treatment, data = dW.pp,
-             weights = varIdent(form=~1|treatment))
-
-## chunk 13
-c("t-test" = as.double(diff(e.t.test$estimate)),
-  "lm" = as.double(coef(e.lm)["treatmentActive"]),
-  "gls" = as.double(coef(e.gls)["treatmentActive"]))
-
-## chunk 14
-c("t-test" = as.double(e.t.test$stderr),
-  "lm" = sqrt(vcov(e.lm)["treatmentActive","treatmentActive"]),
-  "gls" = sqrt(vcov(e.gls)["treatmentActive","treatmentActive"]))
-
-## * Exercise A: Longitudinal study
-
-## chunk 15
-head(armdW)
-
-## chunk 16
-head(is.na(armdW))
-
-## chunk 17
-colSums(is.na(armdW))
-
-## chunk 18
-rowSums(is.na(armdW))[1:5]
-
-## chunk 19
-vec.visual <- c("visual0", "visual4", "visual12",
-                "visual24", "visual52")
-plot(armdW[,vec.visual], col = armdW$treat.f)
-
-## chunk 20
-plot(armdW[,vec.visual], col = armdW$treat.f)
-
-## chunk 21
+library(LMMstar)
 library(ggplot2)
-gg <- ggplot(armdL, aes(x = week, y = visual, 
-                        group = subject, color = treat.f))
-gg <- gg + geom_point() + geom_line()
-gg
+library(nlmeU)
+library(reshape2)
 
-## chunk 22
-print(gg + theme(text = element_text(size=20)))
+## * load data --------------------------
+data(armd.wide, package = "nlmeU")
 
-## chunk 23
-gg2 <- gg + facet_grid(treat.f~lesion, labeller = label_both)
-gg2
+## reshape
+library(reshape2)
+armd.long <- melt(armd.wide,
+                  measure.vars = paste0("visual",c(0,4,12,24,52)),
+                  id.var = c("subject","lesion","treat.f","miss.pat"),
+                  variable.name = "week",
+                  value.name = "visual")
+armd.long$week <- factor(armd.long$week,
+                         level = paste0("visual",c(0,4,12,24,52)),
+                         labels = c(0,4,12,24,52))
 
-## chunk 24
-print(gg2 + theme(text = element_text(size=20)))
+## * Part 1: descriptive statistics --------------------------
 
-## chunk 25
-gg <- ggplot(armdL, aes(x = week, y = visual, 
-                        fill = treat.f))
-gg <- gg + geom_boxplot()
-gg
+## question 1
+str(armd.wide)
+table(armd.wide$miss.pat)
+table(armd.wide$treat.f)
 
-## chunk 26
-print(gg + theme(text = element_text(size=20)))
+table(armd.long$week, armd.long$treat.f)
 
-## chunk 27
-armdW.p <- armdW[armdW$treat.f=="Placebo",]
-armdW.a <- armdW[armdW$treat.f=="Active",]
+## question 2
+armd.s <- summarize(visual ~ week + treat.f, na.rm = TRUE,
+                    data = armd.long)
+armd.s
 
-## chunk 28
-mean(armdW.a$visual0)
+summarize(visual ~ week, na.rm = TRUE,
+          data = armd.long)
 
-## chunk 29
-library(data.table)
-dtL <- as.data.table(armdL)
-dtL[,.(n = length(visual), 
-       missing = sum(is.na(visual)), 
-       observed = sum(!is.na(visual)), 
-       mean = mean(visual, na.rm=TRUE),
-       std = sd(visual, na.rm=TRUE),
-       min = min(visual, na.rm=TRUE),
-       max = max(visual, na.rm=TRUE)), 
-    by = c("week","treat.f")]
+summarize(visual ~ week + treat.f|subject, na.rm = TRUE,
+          data = armd.long)
 
-## chunk 30
-rho <- cor(armdW[,c("visual0","visual4","visual12",
-                    "visual24","visual52")], use = "complete")
-rho
+## question 3
+gg.box <- ggplot(armd.long, aes(x = week, y = visual, fill = treat.f))
+gg.box <- gg.box + geom_boxplot()
+gg.box <- gg.box + labs(x = "week", fill = "Treatment group")
+gg.box
 
-## chunk 31
-position <- which(lower.tri(rho), arr.ind =TRUE)
-position[] <- c(0,4,12,24,52)[as.double(position)]
-df.rho <- data.frame(interval = position[,1] - position[,2],
-                     correlation = rho[lower.tri(rho)])
-gg <- ggplot(df.rho, aes(x = interval, y = correlation))
-gg <- gg + geom_point() + geom_smooth(method = "lm")
-gg <- gg + xlab("time interval")
-gg
+gg.spa <- ggplot(armd.long, aes(x = week, y = visual,
+                          group = subject, color = treat.f))
+gg.spa <- gg.spa + geom_point() + geom_line()
+gg.spa <- gg.spa + labs(x = "week", color = "Treatment group")
+gg.spa
 
-## chunk 32
-print(gg + theme(text = element_text(size=20)))
+gg.spa2 <- ggplot(armd.long, aes(x = as.numeric(as.character(week)), y = visual,
+                          group = subject, color = treat.f))
+gg.spa2 <- gg.spa2 + geom_point() + geom_line()
+gg.spa2 <- gg.spa2 + labs(x = "week", color = "Treatment group")
+gg.spa2
 
-## chunk 33
-armdW.p$change4 <- armdW.p$visual4 - armdW.p$visual0 
-armdW.p$change12 <- armdW.p$visual12 - armdW.p$visual0 
-armdW.p$change24 <- armdW.p$visual24 - armdW.p$visual0 
-armdW.p$change52 <- armdW.p$visual52 - armdW.p$visual0 
+gg.mean <- ggplot(armd.s, aes(x = week, y = mean,
+                             group = treat.f, color = treat.f))
+gg.mean <- gg.mean + geom_point() + geom_line()
+gg.mean <- gg.mean + labs(y = "visual", x = "week", color = "Treatment group")
+gg.mean
 
-armdW.a$change4 <- armdW.a$visual4 - armdW.a$visual0 
-armdW.a$change12 <- armdW.a$visual12 - armdW.a$visual0 
-armdW.a$change24 <- armdW.a$visual24 - armdW.a$visual0 
-armdW.a$change52 <- armdW.a$visual52 - armdW.a$visual0 
+gg.spa2 <- ggplot(mapping = aes(x = week, color = treat.f))
+gg.spa2 <- gg.spa2 + geom_line(data = armd.long, alpha = 0.3,
+                               aes(y = visual, group=subject))
+gg.spa2 <- gg.spa2 + geom_point(data = armd.s, aes(y = mean), size = 3)
+gg.spa2 <- gg.spa2 + geom_line(data = armd.s, aes(y = mean, group = treat.f), size = 1.5)
+gg.spa2 <- gg.spa2 + labs(x = "", color = "Treatment group")
+gg.spa2
 
-## chunk 34
-ttest4 <- t.test(armdW.a$change4,armdW.p$change4)
-ttest12 <- t.test(armdW.a$change12,armdW.p$change12)
-ttest24 <- t.test(armdW.a$change24,armdW.p$change24)
-ttest52 <- t.test(armdW.a$change52,armdW.p$change52)
+## question 4
+## left panel
+gg.NA <- ggplot(armd.s , aes(x = week, y = missing/(observed+missing),
+                             color = treat.f, group = treat.f))
+gg.NA <- gg.NA + geom_point(size = 6) + geom_line(size = 2)
+gg.NA <- gg.NA + scale_y_continuous(labels = scales::percent)
+gg.NA
 
-## chunk 35
-ttest52
+## right panel
+armd.visual <- armd.wide[,paste0("visual",c(0,4,12,24,52))]
+plot(summarizeNA(armd.visual))
 
-## chunk 36
-c(week4 = as.double(diff(ttest4$estimate)), 
-  week12 = as.double(diff(ttest12$estimate)), 
-  week24 = as.double(diff(ttest24$estimate)), 
-  week52 = as.double(diff(ttest52$estimate)))
+## * Part 2: univariate approach --------------------------
 
-## chunk 37
-p.adjust(c(ttest4$p.value, ttest12$p.value, 
-           ttest24$p.value, ttest52$p.value),
-         method = "bonferroni")
+## question 5
+test <- is.na(armd.wide$visual0)+is.na(armd.wide$visual52)
+armd.wideCC <- armd.wide[test==0,]
+armd.wideCC$change <- armd.wideCC$visual52 - armd.wideCC$visual0
 
-## chunk 38
-X$fit.linear <- predict(e.linear, newdata = X)
-X$fit.np <- predict(e.np, newdata = X)
+hist(armd.wideCC$change, breaks = seq(-60,30,by=5))
+hist(armd.wideCC$change)
 
-## chunk 39
-gg <- ggplot(X, aes(x = week.num, group = treat.f, color = treat.f))
-gg <- gg + geom_line(aes(y = fit.linear, linetype = "linear"))
-gg <- gg + geom_line(aes(y = fit.np, linetype = "non-parametric"))
-gg <- gg + geom_point(aes(y = fit.linear, shape = "linear"))
-gg <- gg + geom_point(aes(y = fit.np, shape = "non-parametric"))
-gg <- gg + xlab("time from inclusion (in weeks)")
-gg <- gg + ylab("expected vision")
-gg <- gg + labs(shape = "model", linetype = "model")
-gg
+## question 6
+e.tt <- t.test(change ~ treat.f, data = armd.wideCC)
+e.tt
 
-## chunk 40
-print(gg + theme(text = element_text(size=20)))
+e.tt$estimate[2] - e.tt$estimate[1]
+diff(e.tt$estimate)
+diff(armd.s[armd.s$week==52,"mean"] - armd.s[armd.s$week==0,"mean"])
 
-## chunk 41
-anova(e.linear,e.np)
+armd.wide[1,] ## excluded individual
 
-## chunk 42
-summary(e.linear)$coef
+mean52CC <- summarize(visual52 ~ treat.f, data = armd.wideCC)$mean
+mean0CC <- summarize(visual0 ~ treat.f, data = armd.wideCC)$mean
+diff(mean52CC - mean0CC)
 
-## chunk 43
-gg <- ggplot(armdL.cc, aes(x = week, y = residuals, fill = treat.f))
-gg <- gg + geom_boxplot()
-gg
+## question 7
+boxplot(change ~ treat.f, data = armd.wideCC)
 
-## chunk 44
-print(gg + theme(text = element_text(size=20)))
 
-## chunk 45
-cor(armaW2.cc[,c("0","4","12","24","52")], use = "complete")
+e.lm <- lm(change ~ treat.f, data = armd.wideCC)
+summary(e.lm)$coef
 
-## chunk 46
-X$fit.lme <- predict(e.lme, newdata = X, level = 0)
+e.lmm <- lmm(change ~ treat.f, data = armd.wideCC, structure = IND(~treat.f))
+summary(e.lmm)
 
-gg <- ggplot(X, aes(x = week.num, group = treat.f, color = treat.f))
-gg <- gg + geom_line(aes(y = fit.lme))
-gg <- gg + geom_point(aes(y = fit.lme))
-gg <- gg + xlab("time from inclusion (in weeks)") + ylab("expected vision")
-gg
+## question 8
+e.tt52 <- t.test(I(visual52 - visual0) ~ treat.f, data = armd.wide)
+e.tt52
 
-## chunk 47
-summary(e.lme)$tTable
+e.tt24 <- t.test(I(visual24 - visual0) ~ treat.f, data = armd.wide)
+e.tt24
 
-## chunk 48
-X$fit.gls <- predict(e.gls, newdata = X)
+## * Part 3: multivariate approach --------------------------
+armd.long52 <- armd.long[armd.long$week %in% c("0","52"),]
+armd.long52$week <- droplevels(armd.long52$week)
 
-gg <- ggplot(X, aes(x = week.num, group = treat.f, color = treat.f))
-gg <- gg + geom_line(aes(y = fit.lme, linetype = "random intercept"))
-gg <- gg + geom_line(aes(y = fit.gls, linetype = "unstructured"))
-gg <- gg + geom_point(aes(y = fit.lme, shape = "random intercept"))
-gg <- gg + geom_point(aes(y = fit.gls, shape = "unstructured"))
-gg <- gg + xlab("time from inclusion (in weeks)") + ylab("expected vision")
-gg <- gg + labs(shape = "model", linetype = "model")
-gg
+## Question 9
+armd.long52CC <- armd.long52[armd.long52$subject %in% armd.wideCC$subject,]
 
-## chunk 49
-summary(e.gls)$tTable
+e052.lmm <- lmm(visual ~ treat.f*week,
+                repetition = ~week|subject,
+                data = armd.long52CC)
+summary(e052.lmm)
+plot(e052.lmm)
+model.tables(e052.lmm)
 
-## * Exercise B: Data visualisation
+grid <- unique(armd.long52CC[,c("treat.f","week")])
+predict(e052.lmm, newdata = grid)
+## 39.10000  - 54.57778
+c(placebo.0 = as.double(coef(e052.lmm)["(Intercept)"]),
+  placebo.52 = sum(coef(e052.lmm)[c("(Intercept)","week52")]),
+  active.0 = sum(coef(e052.lmm)[c("(Intercept)","treat.fActive")]),
+  active.52 = sum(coef(e052.lmm)))
 
-## chunk 50
-c(mean(dW[,"X1"]),mean(dW[,"X2"]),mean(dW[,"X3"]))
+## Question 10
+e52.lmm <- lmm(visual ~ treat.f*week,
+               repetition = ~week|subject,
+               data = armd.long52)
+summary(e52.lmm)
 
-## chunk 51
-cov(dW[,c("X1","X2","X3")])
+e.lmm <- lmm(visual ~ treat.f*week,
+             repetition = ~week|subject,
+             data = armd.long)
+summary(e.lmm)
+plot(e.lmm)
 
-## chunk 52
-mu
+## Question 11
+armd.long$week.num <- as.numeric(as.character(armd.long$week))
+eLin.lmm <- lmm(visual ~ week + week.num:treat.f,
+                repetition = ~ week | subject, structure = "UN",
+                data = armd.long)
+model.tables(eLin.lmm)
 
-## chunk 53
-Sigma
+52*coef(eLin.lmm)["week.num:treat.fActive"]
 
-## chunk 54
-n2 <- 20
-set.seed(10)
-dW2 <- data.frame(id = 1:n2, rmvnorm(n2, mean = 0:2, sigma = Sigma))
-cov(dW2[,c("X1","X2","X3")])
+grid <- unique(armd.long[,c("week","week.num","treat.f")],)
+gridA <- predict(eLin.lmm, newdata = grid, keep.newdata = TRUE)
+mu0_A <- gridA[gridA$treat.f == "Active" & gridA$week==0,"estimate"]
+mu52_A <- gridA[gridA$treat.f == "Active" & gridA$week==52,"estimate"]
+mu0_P <- gridA[gridA$treat.f == "Placebo" & gridA$week==0,"estimate"]
+mu52_P <- gridA[gridA$treat.f == "Placebo" & gridA$week==52,"estimate"]
+(mu52_A - mu0_A) - (mu52_P - mu0_P)
 
-## chunk 55
-set.seed(10)
-df.res <- do.call(rbind,lapply(1:100, function(i){
-  dW2 <- data.frame(id = 1:n2, rmvnorm(n2, mean = 0:2, sigma = Sigma))
-  Sigma.hat <- cov(dW2[,c("X1","X2","X3")])
-  return(setNames(Sigma.hat[,1], c("sigma2_11","cov_12","cov_23")))
-}))
-boxplot(df.res, main = "sample size: 20") 
-abline(h = c(sd1^2,cov,cov2), col = "red")
 
-## chunk 56
-boxplot(df.res, main = "sample size: 20") 
-abline(h = c(sd1^2,cov,cov2), col = "red")
 
-## chunk 57
-n3 <- 2000
-set.seed(10)
-df.res <- do.call(rbind,lapply(1:100, function(i){
-  dW2 <- data.frame(id = 1:n3, rmvnorm(n3, mean = 0:2, sigma = Sigma))
-  Sigma.hat <- cov(dW2[,c("X1","X2","X3")])
-  return(setNames(Sigma.hat[,1], c("sigma2_11","cov_12","cov_23")))
-}))
-boxplot(df.res, main = "sample size: 2000") 
-abline(h = c(sd1^2,cov,cov2), col = "red")
-
-## chunk 58
-boxplot(df.res, main = "sample size: 2000") 
-abline(h = c(sd1^2,cov,cov2), col = "red")
-
-## chunk 59
-plot(dW[,c("X1","X2","X3")])
-
-## chunk 60
-plot(dW[,c("X1","X2","X3")])
-
-## chunk 61
-boxplot(X ~ time, data = dL)
-ggplot(dL, aes(x = time, y = X)) + geom_boxplot()
-
-## chunk 62
-ggplot(dL, aes(x = time, y = X)) + geom_boxplot() + theme(text = element_text(size=20))
-
-## chunk 63
-matplot(t(dW[,c("X1","X2","X3")]), type = "l")
-ggplot(dL, aes(x = time, y = X, group = id, color = id)) + geom_line() + geom_point()
-
-## chunk 64
-ggplot(dL, aes(x = time, y = X, group = id, color = id)) + geom_line() + geom_point() + theme(text = element_text(size=20))
-
+gridB <- predict(e.lmm, newdata = grid, keep.newdata = TRUE)
+gg.fit <- ggplot(mapping = aes(x = week.num, y = estimate,
+                               color = treat.f, group = treat.f))
+gg.fit <- gg.fit + geom_point(data = gridA, aes(shape = "linear"),
+                              size = 2)
+gg.fit <- gg.fit + geom_line(data = gridA, aes(linetype = "linear"),
+                             size = 1)
+gg.fit <- gg.fit + geom_point(data = gridB, aes(shape = "non-linear"),
+                              size = 2)
+gg.fit <- gg.fit + geom_line(data = gridB, aes(linetype = "non-linear"),
+                             size = 1)
+gg.fit <- gg.fit + labs(x = "Time (in weeks)", y = "Vision",
+                        shape = "Treatment effect model",
+                        linetype = "Treatment effect model",
+                        color = "Treatment group")
+gg.fit
+##----------------------------------------------------------------------
+### exercise-repMes.R ends here

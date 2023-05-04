@@ -28,11 +28,14 @@ IrFinPo$Country <- droplevels(IrFinPo$Country) # delete unused level
 
 #----- Table 1 making---
 library(Publish)
-Tab1ex <- univariateTable(Country~age+Q(bmi)+Q(vitdintake)+sunexp,
+Tab1ex <- univariateTable(Country~age+Q(bmi)+Q(vitdintake)+sunexp, 
                           data=IrFinPo,
                           compare.groups = FALSE,
                           show.totals = FALSE)
 Tab1ex
+# Important details about the above code:
+#  - "Country" to the left hand side of "~" means that we want to make descriptive statistics per country
+#  - for numerical variables, use Q() if you want to report "median [Q1-Q3]" instead of "mean (sd)" (the default)
 
 
 #---- Analyses--------

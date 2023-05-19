@@ -91,6 +91,7 @@ tab1
 #' endpoint.
 #' 
 ## -----------------------------------------------------------------------------
+library(survival)
 library(prodlim)
 KM1 <- prodlim(Surv(timeD,statusD)~rx,data=d)
 
@@ -148,10 +149,7 @@ round(c(2083,  1548,  2552)/365,1)
 #' We now report the estimated 7-year survival probabilities in each group, together with a
 #' 95%-CI.
 ## -----------------------------------------------------------------------------
-KM10 <- summary(KM1,time=7*365)$table$`rx=Obs` 
-KM10 # results for group rx=0
-KM11 <- summary(KM1,time=7*365)$table$`rx=Lev+5FU`
-KM11 # results for group rx=1
+summary(KM1,time=7*365)
 
 #' 
 #' We read that we estimated the 7-year survival probability to be 43.5%
@@ -162,6 +160,10 @@ KM11 # results for group rx=1
 #' We now report the estimated difference in 7-year survival probability, together with a
 #' 95%-CI and a p-value.
 ## -----------------------------------------------------------------------------
+# First extract (and save) the relevant estimates for each group
+KM1.res <- summary(KM1,time=7*365) # results for both groups 
+KM10 <- as.matrix(KM1.res[KM1.res$rx=="Obs",c("surv","se.surv")])     # results for group rx="Obs"
+KM11 <- as.matrix(KM1.res[KM1.res$rx=="Lev+5FU",c("surv","se.surv")]) # results for group trt="Lev+5FU"
 # Second, compute the difference
 diffSurv <- KM11[1,"surv"] - KM10[1,"surv"]
 # Third, compute the s.e. of the difference
@@ -193,7 +195,6 @@ round(ResDiffSurv,3)
 #' log-rank test (just to practice and explore the data further). 
 #' 
 ## -----------------------------------------------------------------------------
-library(survival)
 ResLogRank <- survdiff(Surv(timeD,statusD)~rx,data=d)
 print(ResLogRank,digits=6)
 
@@ -213,6 +214,7 @@ print(ResLogRank,digits=6)
 #' Cox model and its 95%-CI. We use the `coxph` function to compute this as follows.
 #' 
 ## -----------------------------------------------------------------------------
+library(survival)
 cox1 <- coxph(Surv(timeD,statusD)~rx,data=d)
 summary(cox1)
 

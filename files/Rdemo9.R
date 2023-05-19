@@ -48,10 +48,9 @@ summary(KM2,time=2*365) # Note: beware of the time unit!
 
 # ----- Compute the estimated survival probability difference with 95%-CI and p-value.----
 # First extract (and save) the relevant estimates for each group
-KM20 <- summary(KM2,time=2*365)$table$`trt=0` 
-KM20 # results for group trt=0
-KM21 <- summary(KM2,time=2*365)$table$`trt=1`
-KM21 # results for group trt=1
+KM2.res <- summary(KM2,time=2*365)          # results for both groups 
+KM20 <- as.matrix(KM2.res[KM2.res$trt==0,c("surv","se.surv")]) # extract results for group trt=0 only
+KM21 <- as.matrix(KM2.res[KM2.res$trt==1,c("surv","se.surv")]) # extract results for group trt=1 only
 # Second, compute the difference
 diffSurv <- KM21[1,"surv"] - KM20[1,"surv"]
 # Third, compute the s.e. of the difference
@@ -168,11 +167,11 @@ plot(fitAJ,
 summary(fitAJ,time=3) # read at "Cause:  1" for the "main" event (status=1), i.e., hospitalization
 
 # ----- Compute the estimated absolute risk difference  with 95%-CI and p-value.----
+#
 # First extract (and save) the relevant estimates for each group
-fitAJ0 <- summary(fitAJ,time=3)$table$`1`$`trt=0`
-fitAJ1 <- summary(fitAJ,time=3)$table$`1`$`trt=1`
-fitAJ0 # results for group trt=0
-fitAJ1 # results for group trt=1
+fitAJ.res <- summary(fitAJ,time=3)
+fitAJ0 <- as.matrix(fitAJ.res[fitAJ.res$trt==0 & fitAJ.res$cause==1,c("cuminc","se.cuminc")]) # extract results for group trt=0 only
+fitAJ1 <- as.matrix(fitAJ.res[fitAJ.res$trt==1 & fitAJ.res$cause==1,c("cuminc","se.cuminc")]) # extract results for group trt=1 only
 # Second, compute the difference
 diffRisk <- fitAJ1[1,"cuminc"] - fitAJ0[1,"cuminc"]
 # Third, compute the s.e. of the difference

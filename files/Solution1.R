@@ -173,7 +173,8 @@ t.test(d$Psys[d$SCD==0 & d$sex==2])
 #' 
 #' We now produce a dotplot to display the individual observations.
 ## ---- fig.width=5-------------------------------------------------------------
-stripchart(d$Psys~factor(d$SCD,levels=c(0,1),labels=c("No SCD","SCD")),
+stripchart(d$Psys[d$sex==2]~factor(d$SCD[d$sex==2],
+           levels=c(0,1),labels=c("No SCD","SCD")),
            vertical=TRUE,
            method="jitter",
            xlab="",

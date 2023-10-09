@@ -46,7 +46,7 @@ hist(child2,main="",xlab="height (m)",col="grey",freq=FALSE)
 hist(child2,main="",xlab="height (m)",col="grey")
 
 # Load third data example (Data on tumor thickness)
-data(melanoma)
+data(melanoma,package="timereg")
 
 # Histogram: version with y-axis showing the frequency
 hist(melanoma$thick,xlab="Tumor thickness (1/100 mm)",main="",col="grey")

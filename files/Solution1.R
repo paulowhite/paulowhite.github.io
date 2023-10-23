@@ -217,7 +217,7 @@ abline(0,1,col="red",lty=2,lwd=3)
 #' It looks "fine", but it is, as always, difficult to say without "references" to compare to. Small sample random variation is difficult to understand. Hence the "Wally plot" can help.
 ## ---- fig.width=7,fig.height=7------------------------------------------------
 library(MESS)
-lm0 <- lm(d$MAP[d$SCD==0]~1)
+lm0 <- lm(MAP~1,data=d[d$SCD==0,])
 qqnorm.wally <- function(x, y, ...) { qqnorm(y, ...) ; abline(a=0, b=1) } 
 wallyplot(lm0, FUN=qqnorm.wally, main="",hide=FALSE,col="blue")
 

@@ -89,7 +89,8 @@ qqnorm(scale(log(melanoma$thick)),main="QQplot of log-tumor thickness:\n log-tra
 abline(0,1,col="red",lty=2,lwd=3)
 
 # Wally plot
-lm0 <- lm(log(melanoma$thick)~1)
+melanoma$logthick <- log(melanoma$thick) # create new variable =log(thickness)
+lm0 <- lm(logthick~1,data=melanoma)
 qqnorm.wally <- function(x, y, ...) { qqnorm(y, ...) ; abline(a=0, b=1) } #  Define function to plot a QQplot with an identity line
 wallyplot(lm0, FUN=qqnorm.wally, main="",hide=FALSE,col="blue")
 

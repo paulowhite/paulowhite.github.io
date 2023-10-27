@@ -167,7 +167,7 @@ permsrplot <- function(x, y, ...) {
     plot(x, y,ylab="Residuals",xlab="Fitted values",  ...) ;
     abline(h=0,lty=3,col="grey")
     lines(lowess(x, y), lty=1,col="red")}
-    wallyplot(predict(lmfit),
+wallyplot(predict(lmfit),
           residuals(lmfit),
           FUN=permsrplot,simulateFunction=permsr,hide=FALSE,col="blue")
 

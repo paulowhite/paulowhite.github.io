@@ -3,9 +3,9 @@
 ## Author: Brice Ozenne
 ## Created: nov 27 2022 (23:10) 
 ## Version: 
-## Last-Updated: maj  4 2023 (12:52) 
+## Last-Updated: nov 16 2023 (14:43) 
 ##           By: Brice Ozenne
-##     Update #: 4
+##     Update #: 9
 ##----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -18,20 +18,19 @@
 library(LMMstar)
 library(ggplot2)
 library(nlmeU)
-library(reshape2)
 
 ## * load data --------------------------
 data(armd.wide, package = "nlmeU")
 
 ## reshape
-library(reshape2)
-armd.long <- melt(armd.wide,
-                  measure.vars = paste0("visual",c(0,4,12,24,52)),
-                  id.var = c("subject","lesion","treat.f","miss.pat"),
-                  variable.name = "week",
-                  value.name = "visual")
-armd.long$week <- factor(armd.long$week,
-                         level = paste0("visual",c(0,4,12,24,52)),
+armd.long <- reshape(armd.wide, direction = "long",
+                     varying = paste0("visual",c(0,4,12,24,52)),
+                     idvar = c("subject"),
+                     timevar = "week",
+                     v.names = "visual")
+
+armd.long$week <- factor(armd.long$week, 
+                         level = 1:5,
                          labels = c(0,4,12,24,52))
 
 ## * Part 1: descriptive statistics --------------------------
@@ -48,12 +47,12 @@ armd.s <- summarize(visual ~ week + treat.f, na.rm = TRUE,
                     data = armd.long)
 armd.s
 
+
 summarize(visual ~ week, na.rm = TRUE,
           data = armd.long)
 
-summarize(visual ~ week + treat.f|subject, na.rm = TRUE,
-          data = armd.long)
-
+armd.s2 <- summarize(visual ~ week + treat.f|subject, na.rm = TRUE,
+                     data = armd.long)
 ## question 3
 gg.box <- ggplot(armd.long, aes(x = week, y = visual, fill = treat.f))
 gg.box <- gg.box + geom_boxplot()
@@ -85,6 +84,11 @@ gg.spa2 <- gg.spa2 + geom_point(data = armd.s, aes(y = mean), size = 3)
 gg.spa2 <- gg.spa2 + geom_line(data = armd.s, aes(y = mean, group = treat.f), size = 1.5)
 gg.spa2 <- gg.spa2 + labs(x = "", color = "Treatment group")
 gg.spa2
+
+plot(armd.s2, type = "mean")
+plot(armd.s2, type = "sd")
+plot(armd.s2, type = "cor")
+plot(armd.s2, type = "pc.missing")
 
 ## question 4
 ## left panel
@@ -131,6 +135,8 @@ summary(e.lm)$coef
 
 e.lmm <- lmm(change ~ treat.f, data = armd.wideCC, structure = IND(~treat.f))
 summary(e.lmm)
+
+summary(anova(e.lmm, effects = "variance"))
 
 ## question 8
 e.tt52 <- t.test(I(visual52 - visual0) ~ treat.f, data = armd.wide)

@@ -25,6 +25,21 @@ dfL$week.f <- factor(paste0("week ",dfL$week),
 
 ## * Illustrative example
 
+
+## ** descriptive statistics
+## mean, sd, correlation
+dfS <- summarize(visual ~ week.f + treat.f | subject, na.rm = TRUE,
+                 data = dfL)
+dfS
+
+##  missing values patterns
+dfNA <- summarizeNA(dfW)
+dfNA
+
+plot(dfNA)
+plot(dfNA, order.pattern = "n.missing")
+plot(dfNA, order.pattern = "frequency")
+
 ## ** spaghetti plot
 gg.spa <- ggplot(dfL, aes(x = week.f, y = visual,
                           group = subject, color = treat.f))
@@ -38,10 +53,39 @@ gg.spa2 <- gg.spa2 + geom_point() + geom_line()
 gg.spa2 <- gg.spa2 + labs(color = "Treatment group")
 gg.spa2
 
-## ** descriptive statistics
-dfS <- summarize(visual ~ week.f + treat.f | subject, na.rm = TRUE,
-                 data = dfL)
-dfS
+## ** boxplot
+gg.box <- ggplot(dfL, aes(x = week.f, y = visual, fill = treat.f))
+gg.box <- gg.box + geom_boxplot()
+gg.box <- gg.box + labs(x = "Treatment", fill = "Treatment group")
+gg.box
+
+## ** mean plot
+gg.mean <- ggplot(dfS, aes(x = week.f, y = mean,
+                           group = treat.f, color = treat.f))
+gg.mean <- gg.mean + geom_point(size = 4) + geom_line(linewidth = 1.5)
+gg.mean <- gg.mean + labs(y = "visual", x = "", color = "Treatment group")
+gg.mean
+
+plot(dfS)
+plot(dfS, type = "sd")
+
+## ** spaghetti + mean plot
+gg.spa2 <- ggplot(mapping = aes(x = week.f, color = treat.f))
+gg.spa2 <- gg.spa2 + geom_line(data = dfL, alpha = 0.3,
+                               aes(y = visual, group=subject))
+gg.spa2 <- gg.spa2 + geom_point(data = dfS, aes(y = mean), size = 3)
+gg.spa2 <- gg.spa2 + geom_line(data = dfS, aes(y = mean, group = treat.f), linewidth = 1.5)
+gg.spa2 <- gg.spa2 + labs(x = "", color = "Treatment group")
+gg.spa2
+
+## ** percentage of missing values
+dfS$pc.missing <- dfS$missing/(dfS$missing+dfS$observed)
+
+gg.pcNA <- ggplot(dfS, aes(x=week.f,y=pc.missing,group=treat.f,color=treat.f))
+gg.pcNA <- gg.pcNA + geom_point(size = 4) + geom_line(linewidth = 1.5)
+gg.pcNA <- gg.pcNA + labs(y = "Percentage of missing data", color = "Treatment group") + scale_y_continuous(labels = scales::percent)
+gg.pcNA
+
 
 ## * Univariate approach
 
@@ -62,6 +106,10 @@ gg.hist
 
 ## ** step 3: compare the two groups
 t.test(change~treat.f, data = dfW.CC)
+
+## summary(lm(change~treat.f, data = dfW.CC))
+## summary(lmm(change~treat.f, structure = IND(~treat.f), data = dfW.CC))
+## summary(lmm(visual52~visual0+treat.f, structure = IND(~treat.f), data = dfW.CC))
    
 ## equivalence with a mixed model
 dfL52.CC <- dfL.CC[dfL.CC$week.f %in% c("week 0","week 52"),]
@@ -113,43 +161,5 @@ model.tables(eLin.lmm)
 plot(eLin.lmm)
 plot(eLin.lmm, obs.alpha = 0.1, ci = FALSE)
 
-## * Extra material
 
-## ** missing values patterns
-dfNA <- summarizeNA(dfW)
-dfNA
-
-plot(dfNA)
-plot(dfNA, order.pattern = "n.missing")
-plot(dfNA, order.pattern = "frequency")
-
-
-dfS$pc.missing <- dfS$missing/(dfS$missing+dfS$observed)
-
-gg.pcNA <- ggplot(dfS, aes(x=week.f,y=pc.missing,group=treat.f,color=treat.f))
-gg.pcNA <- gg.pcNA + geom_point(size = 4) + geom_line(linewidth = 1.5)
-gg.pcNA <- gg.pcNA + labs(y = "Percentage of missing data", color = "Treatment group") + scale_y_continuous(labels = scales::percent)
-gg.pcNA
-
-## ** boxplot
-gg.box <- ggplot(dfL, aes(x = week.f, y = visual, fill = treat.f))
-gg.box <- gg.box + geom_boxplot()
-gg.box <- gg.box + labs(x = "Treatment", fill = "Treatment group")
-gg.box
-
-## ** mean plot
-gg.mean <- ggplot(dfS, aes(x = week.f, y = mean,
-                           group = treat.f, color = treat.f))
-gg.mean <- gg.mean + geom_point(size = 4) + geom_line(linewidth = 1.5)
-gg.mean <- gg.mean + labs(y = "visual", x = "", color = "Treatment group")
-gg.mean
-
-## ** spaghetti + mean plot
-gg.spa2 <- ggplot(mapping = aes(x = week.f, color = treat.f))
-gg.spa2 <- gg.spa2 + geom_line(data = dfL, alpha = 0.3,
-                               aes(y = visual, group=subject))
-gg.spa2 <- gg.spa2 + geom_point(data = dfS, aes(y = mean), size = 3)
-gg.spa2 <- gg.spa2 + geom_line(data = dfS, aes(y = mean, group = treat.f), linewidth = 1.5)
-gg.spa2 <- gg.spa2 + labs(x = "", color = "Treatment group")
-gg.spa2
 

@@ -26,7 +26,7 @@ rm(list=ls())
 #' 
 #' **Statistical methods:** we will compare the mean of the two groups using Welch's t-test. We plan to report the estimated mean in each group and their difference, the corresponding 95% confidence intervals and the p-value of the Welch's t-test.
 #' 
-#' **Prepare and load the data:** (similar to what it is done in the R-demo of Lecture 2).
+#' **Prepare and load the data**: (similar to what is done in the R-demo of Lecture 2).
 #' 
 ## -----------------------------------------------------------------------------
 library(nlme) 
@@ -113,9 +113,9 @@ axis(2,las=2)
 #'  
 #'  - $H_1$: the distribution of the level of expressed alpha synuclein mRNA is different when the allele length is "intermediate" and "long".
 #' 
-#' **Statistical methods:** we will compare the **distribution** of the two groups using an **exact** Wilcoxon test. This test does not make any assumption regarding the distribution of the data and is exact, which means that the p-values can be trusted even with arbitrary small sample sizes. We will also compare the two distributions visually using a dotplot.
+#' **Statistical methods:** we will compare the **distribution** of the two groups using an **exact** Wilcoxon test. This test does not make any assumption regarding the distribution of the data and is exact, which means that the p-values can be trusted even with arbitrarily small sample sizes. We will also compare the two distributions visually using a dotplot.
 #' 
-#' **Prepare and load the data:** (similar to what it is done in the R-demo of Lecture 2).
+#' **Prepare and load the data**: (similar to what is done in the R-demo of Lecture 2).
 #' 
 ## -----------------------------------------------------------------------------
 library(coin)
@@ -148,7 +148,12 @@ wilcox_test(elevel~alength,data=alpha, distribution='exact')
 #' 
 #' **Visually check whether the main assumptions:** here there is no specific assumption to visually check. The exact Wilcoxon test does not assume normality or anything else. It only assumes that the observations are independent (within and between groups), which should be supported by the design of the study.
 #' 
-#' **Conclusion/reporting:** Although the dotplot suggests that there might be a difference in the distribution of the gene expression between "long" and "intermediate" allele lengths, the exact Wilcoxon test does not show a significant difference (p-value=0.067). I can be hypothesized that there is a difference, but that the sample size of the study is too small to lead to a significant result.
+#' **Conclusion/reporting:** Although the dotplot suggests that there
+#' might be a difference in the distribution of the gene expression
+#' between "long" and "intermediate" allele lengths, the exact Wilcoxon
+#' test does not show a significant difference (p-value=0.067). It can be
+#' hypothesized that there is a difference, but that the sample size of
+#' the study is too small to lead to a significant result.
 #' 
 #' ## Question 3
 #' 
@@ -164,7 +169,7 @@ wilcox_test(elevel~alength,data=alpha, distribution='exact')
 #' **Statistical methods:** we will compare the mean response with dose 0 to that of each non zero dose using a Welch's t-test. We plan to report the estimated mean response for each dose and the differences between dose 0 and any other dose. We plan to adjust for multiple comparisons using the Bonferroni correction. We will report simultaneous 95% confidence intervals and adjusted p-values, to adjust for the fact that we perform four comparisons. This means that we will use the significance level 5%/4=1.25% instead of the usual 5% and compute 100-5%/4=98.75% confidence intervals. (Note: in Lecture 4 we will learn about an alternative, more powerful, approach).
 #' 
 #' 
-#' **Prepare and load the data:** 
+#' **Prepare and load the data**: 
 #' 
 ## -----------------------------------------------------------------------------
 library(DoseFinding) 
@@ -253,7 +258,11 @@ abline(0,1,col="red",lty=2,lwd=3)
 power.t.test(delta=3,sd=2,power=0.9,sig.level=0.05) 
 
 #' 
-#' They need to include 11 mice in each arm.
+#' We could use 11 mice in each arm, hence 22 mice in total. This is
+#' sufficient to have 90\% power to show a difference in mean, if indeed
+#' there is a difference of 3 mm$^3$ in mean tumor growth volume between
+#' the two groups and the standard deviation of tumor growth volume is 2
+#' mm$^3$  in both groups.
 #' 
 #' ## Question 2
 #' 
@@ -261,16 +270,40 @@ power.t.test(delta=3,sd=2,power=0.9,sig.level=0.05)
 power.t.test(delta=3,sd=2.5,sig.level=0.05,n=11)
 
 #' 
-#' If they include 11 mice in each arm and the standard deviation is 2.5 instead of the anticipated value 2, then the power is only 76% (instead of the planned 90%).  
+#' If they include 11 mice in each arm and the standard deviation is 2.5
+#' mm$^3$ instead of the anticipated value 2 mm$^3$, then the power is
+#' only 76% (instead of the planned 90%).
 #' 
 ## -----------------------------------------------------------------------------
 power.t.test(delta=3,sd=3,sig.level=0.05,n=11)
 
 #' 
-#' If they include 11 mice in each arm and the standard deviation is 3 instead of the anticipated value 2, then the power is only 61% (instead of the planned 90%).  
+#' If they include 11 mice in each arm and the standard deviation is 3
+#' mm$^3$ instead of the anticipated value 2 mm$^3$, then the power is
+#' only 61% (instead of the planned 90%).
 #' 
 ## -----------------------------------------------------------------------------
 power.t.test(sd=2,sig.level=0.05,power=0.75,n=11)
 
 #' 
-#' If they include 11 mice in each arm and assuming that the standard deviation is 2, then they can hope to show a difference as small as 2.36, with a power of 75%.
+#' If they include 11 mice in each arm and the standard deviation is 2
+#' mm$^3$, then they can expect at least 75\% chance of getting a
+#' significant result showing a difference in mean at the end of the
+#' experiment, if the difference in mean is at least 2.36 mm$^3$. The
+#' larger the difference in mean and the larger the power and a
+#' difference in mean of 2.36 mm$^3$ gives a power of 75%.
+#' 
+#' Although sample size calculations such as that of question 1 are
+#' typically used on their own to choose a sample size, it is often a
+#' very good idea to complement them with more calculations, such as
+#' those of question 2. Using conservative "guesses" for the expected
+#' mean difference and standard deviations can be useful to make sure
+#' that the experiment will provide sufficient power. On the other hand,
+#' too conservative sample calculations might lead to ethical, financial
+#' and logistical issues which are also important to consider. Striking
+#' the right balance is often not straightforward, but calculations such
+#' as the above, together with thorough discussions with supervisors and
+#' collaborators, will typically help. Planning a study is not all about
+#' statistics, but statistics have an important role to play!
+#' 
+#' 

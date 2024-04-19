@@ -115,7 +115,8 @@ table(d$BMIgroup)
 #' 
 #' ## Question 2
 #' 
-#' We first fit a "usual" ANOVA model that assume the same variance in all groups.
+#' We first fit a "usual" ANOVA model which assumes the same variance in
+#' all groups.
 #' 
 ## -----------------------------------------------------------------------------
 lmfit <- lm(MAP~BMIgroup,data=d)
@@ -131,7 +132,21 @@ summary(lmfit)
 #' 
 #' **Remember:** here the intercept is the mean in the reference group and the other estimates should be interpreted as estimated differences to the reference group.
 #' 
-#' In the output, we can also read "Residual standard error: 8.781". This means that the estimate of the standard **deviation** of the "error term" is  8.78. For interpreting this value, we can for example say the following. For any subject picked up at random in a population similar to that from which our sample was drawn, 95 times out of 100, his/her MAP will be observed not further away than 2 times 8.78 (i.e. 17.56) from the mean values estimated for his/her BMI group. This interpretation relies on the normal distribution of the "error term". But even if this assumption does not hold, this value 8.7 still gives us some information about the spread of MAP observations around the mean. For instance, we can still  make the same interpretation but replacing "95 times out of 100" by "at least 75 times out of 100" in the above sentence (because of the Chebyshev's inequality).
+#' In the output, we can also read "Residual standard error: 8.781". This
+#' means that the estimate of the standard **deviation** of the "error
+#' term" is 8.78. For interpreting this value, we can for example say the
+#' following. For any subject picked up at random in a population similar
+#' to that from which our sample was drawn, 95 times out of 100, his/her
+#' MAP will be observed not further away than 2 times 8.78 (i.e. 17.56)
+#' from the mean values estimated for his/her BMI group. This
+#' interpretation relies on the normal distribution assumption of the
+#' "error term". But even if this assumption does not hold, this value
+#' 8.7 still gives us some information about the spread of MAP
+#' observations around the mean. For instance, we can make the same
+#' interpretation but replacing "95 times out of 100" by "at least 75
+#' times out of 100" in the above sentence. This statement does need any
+#' distributional assumption to be correct (because of the Chebyshev's
+#' inequality).
 #' 
 #' We now compute the (sample) mean of MAP in each BMI group.
 ## -----------------------------------------------------------------------------
@@ -145,7 +160,21 @@ tapply(d$MAP,d$BMIgroup,mean)
 tapply(d$MAP,d$BMIgroup,sd)
 
 #' 
-#' The (sample) standard deviations in each BMI group are relatively close to 8.78, the estimate of the standard **deviation** of the "error term", except maybe for the group of BMI in [25;30). However, we should keep in mind that we do not observe a lot of observations for all BMI groups (n=32, 112, 23 and 9, respectively, see question 1). Hence sampling random variation might explain the difference from one BMI group to another. Finally, note that the model estimate 8.78 can be seen as a "weighted" average of standard deviations in each BMI group, with heavier weights for large groups (8.78 is close to the value of the largest group and within the range of all values).
+#' The (sample) standard deviations in each BMI group are relatively
+#' close to 8.78, the estimate of the standard **deviation** of the
+#' "error term", except maybe for the group of BMI in [25;30). However,
+#' we should keep in mind that we do not observe a lot of observations
+#' for all BMI groups (n=32, 112, 23 and 9, respectively, see question
+#' 1). Hence sampling random variation might explain the differences from
+#' one BMI group to another (at least partly). Hence it does not seem to
+#' be necessary to worry "too much" about a "subtantial" violation of the
+#' modeling assumption of homogeneity of the variances (i.e. same
+#' standard deivation for the outcome, here MAP, in all groups being
+#' compared, here the BMI groups). Finally, note that the model estimate
+#' 8.78 can be seen as a "weighted" average of standard deviations in
+#' each BMI group, with heavier weights for large groups (8.78 is close
+#' to the value of the largest group and within the range of all values).
+#' 
 #' 
 #' ## Question 3
 #' 
@@ -178,11 +207,32 @@ wallyplot(predict(lmfit),
 #' 
 #' From the output in question 2, we can read "F-statistic: 25.93 on 3 and 172 DF,  p-value: 6.896e-14". This means that the p-value of the F-test is p-value < 0.0001. Hence we conclude to a significant association between BMI and MAP.
 #' 
-#' We could have preferred the F-test to the min-P approach here because of the following. The F-test approach is a "good-old" method which is commonly used and considered by many as a simpler approach to the min-P approach. As statistical guidelines of many medical journals (e.g. European Heart Journal) suggest to use methods ‘as simple as possible, but as sophisticated as needed’, this can favor the F-test here. Indeed, although we can reasonably argue that the min-P approach is often more appropriate when the aim is to report the comparisons between all or some of the groups, this was not the aim here. Here we just wanted to investigate an "overall association" and nothing else. Hence the min-P approach is somehow less attractive.
+#' We could have preferred the F-test to the min-P approach here because
+#' of the following. The F-test approach is a "good-old" method which is
+#' commonly used and considered by many as a simpler approach to the
+#' min-P approach. As statistical guidelines of many medical journals
+#' (e.g. European Heart Journal) suggest to use methods ‘as simple as
+#' possible, but as sophisticated as needed’, this can favor the choice
+#' of the F-test here. Indeed, although we can reasonably argue that the
+#' min-P approach is often more appropriate when the aim is to report the
+#' comparisons between all or some of the groups, this was not the aim
+#' here. Here we just wanted to investigate an "overall association" and
+#' nothing else. Hence the nice proporties of the min-P approach are not
+#' very relevant here.
 #' 
 #' 
 #' ## Question 5
-#' Some people sometimes recommend to use BMI as a continuous variable instead of categorizing it, for the statistical analysis. Some go as far as saying that this is always a "better and more powerful" approach. This statement is, however, seen by many as being a bit naive. One main disadvantage of using BMI as a continuous variable is that it is then not so easy to fit a "good" model (especially if sticking to the fundamental principle of prespecification). Assuming linearity does not seem realistic, neither from a clinical point of view nor from what the data suggest. Hence more complicated modeling approaches would be needed (e.g. using splines), which are beyond the scope of this course. These approaches all have pros and cons... 
+#' Some people sometimes recommend to use BMI as a continuous variable
+#' instead of categorizing it, for the statistical analysis. Some go as
+#' far as saying that this is always a "better and more powerful"
+#' approach. This statement is, however, thought by many as being a bit
+#' naive. One main disadvantage of using BMI as a continuous variable is
+#' that it is then not so easy to fit a "good" model (especially if
+#' sticking to the fundamental principle of prespecification). Assuming
+#' linearity does not seem realistic, neither from a clinical point of
+#' view nor from what the data suggest. Hence more complicated modeling
+#' approaches would be needed (e.g. using splines), which are beyond the
+#' scope of this course. These approaches all have pros and cons...
 #' 
 #' # Part 2
 #' 
@@ -216,7 +266,9 @@ summary(lm2wayNum)
 #' 
 #' First of all, with this output it is less clear what the estimate -3.001 at the line "sexNumeric" means. It is the difference in mean for a one unit increase of the variable sex, when other variables remain similar. But, first, we are lucky that sex was coded 1 vs 2, not e.g. 1 vs 3, otherwise we would have obtained a different estimate and should have multiplied it by 2 for a correct interpretation. Second, it is less clear whether -3.001 is the difference estimated for men vs women or for women vs men, i.e. the sign is less easy to interpret because we need to remember what sex=1 and sex=2 mean. Third, the estimate of the intercept does not have a nice interpretation anymore! 
 #' 
-#' **Take home message**: it is much safer (if not mandatory) to use factor variables in the **lm** function for variables coding categorical variables.
+#' **Take home message**: it is much safer (if not a must) to use factor
+#' variables in the **lm** function for variables coding categorical
+#' variables.
 #' 
 #' 
 #' From the output, we can read that the estimated standard deviation of the "error term" is 8.676. This is smaller that 8.78 obtained in Part 1, as expected, because part of the variation of MAP is now explained by sex. The interpretation in terms of spread around the estimated means is the same as in question 2 of Part 1.
@@ -258,6 +310,7 @@ par(mfrow=c(1,1))
 #' Again, we produce a Wally plot because we find it helpful for a more thorough understanding.
 #' 
 ## ---- fig.height=6------------------------------------------------------------
+library(MESS)
 permsr <- function(n) {sample(x=residuals(lm2way),size=n,replace=FALSE)}
 permsrplot <- function(x, y, ...) {
     plot(x, y,ylab="Residuals",xlab="Fitted values",  ...) ;

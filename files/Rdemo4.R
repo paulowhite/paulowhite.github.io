@@ -15,7 +15,7 @@ d <- IBScovars[which(IBScovars$gender==2 & IBScovars$dose!=4 ),]
 summary(d)
 
 # stripchart plot: response vs dose
-set.seed(12587)
+set.seed(12587) # fix the random seed, just to make the plot fully reproducible
 thecols <- c("red","blue","forestgreen","orange")
 stripchart(d$resp~d$dose,
            vertical=TRUE,method="jitter",
@@ -86,11 +86,11 @@ head(weightgain)
 # boxplot 
 boxplot(weightgain~source,
         data=weightgain,
+        outline=FALSE, # do not plot outliers, because we will add all dots later
         col="white",
         border=c("red","forestgreen"),        
         xlab="Source of protein",
         ylab="Weight gain (g)",ylim=c(50,120),xlim=c(0.5,2.5))
-
 # add the dotplot on top
 stripchart(weightgain~source,
            data=weightgain,
@@ -142,4 +142,3 @@ par(mfrow=c(1,2)) # split plot window in two
 plot(Full.lm, which=c(1,2),ask = FALSE,qqline=FALSE,col="blue")
 abline(0,1,col="grey",lty=2)
 par(mfrow=c(1,1)) # restore normal plot window
-

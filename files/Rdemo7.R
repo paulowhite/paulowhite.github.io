@@ -37,6 +37,13 @@ Tab1ex
 #  - "Country" to the left hand side of "~" means that we want to make descriptive statistics per country
 #  - for numerical variables, use Q() if you want to report "median [Q1-Q3]" instead of "mean (sd)" (the default)
 
+# Uncomment and run the code below to save the table into a csv file (in a relevant folder).
+# You can then  open and edit the table with Excel and format it for e.g., publication.
+
+# write.table(summary(Tab1ex),
+#            file = "path_to_where_to_save_the_table/MyTable.csv", # change to save in a relevant folder !
+#            sep=",",
+#            row.names=FALSE)
 
 #---- Analyses--------
 

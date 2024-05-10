@@ -3,9 +3,9 @@
 ## Author: Brice Ozenne
 ## Created: nov 27 2022 (23:10) 
 ## Version: 
-## Last-Updated: nov 16 2023 (14:43) 
+## Last-Updated: maj 10 2024 (12:54) 
 ##           By: Brice Ozenne
-##     Update #: 9
+##     Update #: 13
 ##----------------------------------------------------------------------
 ## 
 ### Commentary: 
@@ -25,24 +25,21 @@ data(armd.wide, package = "nlmeU")
 ## reshape
 armd.long <- reshape(armd.wide, direction = "long",
                      varying = paste0("visual",c(0,4,12,24,52)),
-                     idvar = c("subject"),
-                     timevar = "week",
+                     times = c(0,4,12,24,52),
+                     timevar = "week.num",
                      v.names = "visual")
-
-armd.long$week <- factor(armd.long$week, 
-                         level = 1:5,
-                         labels = c(0,4,12,24,52))
+armd.long$week <- as.factor(armd.long$week)
 
 ## * Part 1: descriptive statistics --------------------------
 
-## question 1
+## ** question 1
 str(armd.wide)
 table(armd.wide$miss.pat)
 table(armd.wide$treat.f)
 
 table(armd.long$week, armd.long$treat.f)
 
-## question 2
+## ** question 2
 armd.s <- summarize(visual ~ week + treat.f, na.rm = TRUE,
                     data = armd.long)
 armd.s
@@ -53,7 +50,16 @@ summarize(visual ~ week, na.rm = TRUE,
 
 armd.s2 <- summarize(visual ~ week + treat.f|subject, na.rm = TRUE,
                      data = armd.long)
-## question 3
+armd.s2
+cor(armd.wide[armd.wide$treat.f=="Active","visual0"],
+    armd.wide[armd.wide$treat.f=="Active","visual4"],
+    use = "pairwise")
+
+armd.s3 <- summarize(visual ~ week|subject, na.rm = TRUE,
+                     data = armd.long)
+cor(armd.wide$visual0,armd.wide$visual4, use = "pairwise")
+
+## ** question 3
 gg.box <- ggplot(armd.long, aes(x = week, y = visual, fill = treat.f))
 gg.box <- gg.box + geom_boxplot()
 gg.box <- gg.box + labs(x = "week", fill = "Treatment group")
@@ -88,7 +94,6 @@ gg.spa2
 plot(armd.s2, type = "mean")
 plot(armd.s2, type = "sd")
 plot(armd.s2, type = "cor")
-plot(armd.s2, type = "pc.missing")
 
 ## question 4
 ## left panel
@@ -97,6 +102,8 @@ gg.NA <- ggplot(armd.s , aes(x = week, y = missing/(observed+missing),
 gg.NA <- gg.NA + geom_point(size = 6) + geom_line(size = 2)
 gg.NA <- gg.NA + scale_y_continuous(labels = scales::percent)
 gg.NA
+
+plot(armd.s2, type = "pc.missing")
 
 ## right panel
 armd.visual <- armd.wide[,paste0("visual",c(0,4,12,24,52))]
@@ -107,14 +114,16 @@ plot(summarizeNA(armd.visual))
 ## question 5
 test <- is.na(armd.wide$visual0)+is.na(armd.wide$visual52)
 armd.wideCC <- armd.wide[test==0,]
-armd.wideCC$change <- armd.wideCC$visual52 - armd.wideCC$visual0
+armd.wideCC$change52 <- armd.wideCC$visual52 - armd.wideCC$visual0
 
-hist(armd.wideCC$change, breaks = seq(-60,30,by=5))
-hist(armd.wideCC$change)
+hist(armd.wideCC$change52, breaks = seq(-60,30,by=5))
+hist(armd.wideCC$change52)
 
 ## question 6
-e.tt <- t.test(change ~ treat.f, data = armd.wideCC)
+e.tt <- t.test(change52 ~ treat.f, data = armd.wideCC)
 e.tt
+# mean in group Placebo  mean in group Active 
+# -11.18095             -15.47778 
 
 e.tt$estimate[2] - e.tt$estimate[1]
 diff(e.tt$estimate)
@@ -127,23 +136,26 @@ mean0CC <- summarize(visual0 ~ treat.f, data = armd.wideCC)$mean
 diff(mean52CC - mean0CC)
 
 ## question 7
-boxplot(change ~ treat.f, data = armd.wideCC)
+boxplot(change52 ~ treat.f, data = armd.wideCC)
 
-
-e.lm <- lm(change ~ treat.f, data = armd.wideCC)
+e.lm <- lm(change52 ~ treat.f, data = armd.wideCC)
 summary(e.lm)$coef
 
-e.lmm <- lmm(change ~ treat.f, data = armd.wideCC, structure = IND(~treat.f))
+e.lmm <- lmm(change52 ~ treat.f, data = armd.wideCC, structure = IND(~treat.f))
 summary(e.lmm)
-
 summary(anova(e.lmm, effects = "variance"))
 
 ## question 8
-e.tt52 <- t.test(I(visual52 - visual0) ~ treat.f, data = armd.wide)
-e.tt52
+armd.wideCC$change4 <- armd.wideCC$visual4 - armd.wideCC$visual0
+armd.wideCC$change12 <- armd.wideCC$visual12 - armd.wideCC$visual0
+armd.wideCC$change24 <- armd.wideCC$visual24 - armd.wideCC$visual0
 
-e.tt24 <- t.test(I(visual24 - visual0) ~ treat.f, data = armd.wide)
-e.tt24
+ttest.mlmm_noAdj <- mt.test(change4+change12+change24+change52 ~ treat.f,
+                            data = armd.wideCC,
+                            method = "none")
+
+ttest.mlmm <- mt.test(change4+change12+change24+change52 ~ treat.f,
+                            data = armd.wideCC)
 
 ## * Part 3: multivariate approach --------------------------
 armd.long52 <- armd.long[armd.long$week %in% c("0","52"),]
@@ -159,13 +171,12 @@ summary(e052.lmm)
 plot(e052.lmm)
 model.tables(e052.lmm)
 
-grid <- unique(armd.long52CC[,c("treat.f","week")])
-predict(e052.lmm, newdata = grid)
-## 39.10000  - 54.57778
 c(placebo.0 = as.double(coef(e052.lmm)["(Intercept)"]),
   placebo.52 = sum(coef(e052.lmm)[c("(Intercept)","week52")]),
   active.0 = sum(coef(e052.lmm)[c("(Intercept)","treat.fActive")]),
   active.52 = sum(coef(e052.lmm)))
+
+effects(e052.lmm, variable = "treat.f")
 
 ## Question 10
 e52.lmm <- lmm(visual ~ treat.f*week,
@@ -178,6 +189,7 @@ e.lmm <- lmm(visual ~ treat.f*week,
              data = armd.long)
 summary(e.lmm)
 plot(e.lmm)
+anova(e.lmm)
 
 ## Question 11
 armd.long$week.num <- as.numeric(as.character(armd.long$week))
@@ -187,18 +199,12 @@ eLin.lmm <- lmm(visual ~ week + week.num:treat.f,
 model.tables(eLin.lmm)
 
 52*coef(eLin.lmm)["week.num:treat.fActive"]
+effects(eLin.lmm, variable = "treat.f", type = "difference")
 
 grid <- unique(armd.long[,c("week","week.num","treat.f")],)
-gridA <- predict(eLin.lmm, newdata = grid, keep.newdata = TRUE)
-mu0_A <- gridA[gridA$treat.f == "Active" & gridA$week==0,"estimate"]
-mu52_A <- gridA[gridA$treat.f == "Active" & gridA$week==52,"estimate"]
-mu0_P <- gridA[gridA$treat.f == "Placebo" & gridA$week==0,"estimate"]
-mu52_P <- gridA[gridA$treat.f == "Placebo" & gridA$week==52,"estimate"]
-(mu52_A - mu0_A) - (mu52_P - mu0_P)
+gridA <- predict(eLin.lmm, newdata = grid, keep.data = TRUE)
+gridB <- predict(e.lmm, newdata = grid, keep.data = TRUE)
 
-
-
-gridB <- predict(e.lmm, newdata = grid, keep.newdata = TRUE)
 gg.fit <- ggplot(mapping = aes(x = week.num, y = estimate,
                                color = treat.f, group = treat.f))
 gg.fit <- gg.fit + geom_point(data = gridA, aes(shape = "linear"),
@@ -214,5 +220,6 @@ gg.fit <- gg.fit + labs(x = "Time (in weeks)", y = "Vision",
                         linetype = "Treatment effect model",
                         color = "Treatment group")
 gg.fit
+
 ##----------------------------------------------------------------------
 ### exercise-repMes.R ends here

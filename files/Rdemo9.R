@@ -26,6 +26,16 @@ quantile(KM1)
 load(url("http://paulblanche.com/files/carcinoma.rda"))
 head(carcinoma)
 
+# Data management: make factor variables
+carcinoma$trt <- factor(carcinoma$trt)
+carcinoma$Tsize <- factor(carcinoma$T<=2,
+                          levels=c(TRUE,FALSE),
+                          labels=c("<=4cm",">4cm"))
+carcinoma$disability <- factor(carcinoma$cond==1,
+                               levels=c(TRUE,FALSE),
+                               labels=c("No","Yes"))
+
+
 # Kaplan-Meier estimation for each treatment group
 KM2 <- prodlim(Hist(time,status)~trt,data=carcinoma)
 
@@ -79,11 +89,34 @@ summary(cox1) # print summary
 print(summary(cox1),digits=8) # same with more digits, can be useful to read the p-value shown at the line "Score (logrank) test"
 
 
+# Restricted Mean Survival Time (RMST) analysis
+ResRMST <- rmst2(time=carcinoma$time/365, # trick: divide by 365 to have a time unit in years
+                 status=carcinoma$status,
+                 arm=carcinoma$trt,
+                 tau=3) # Beware of the time unit!
+ResRMST
+
+
+# multiple cox regression
+cox2 <- coxph(Surv(time,status)~trt+ age+ Tsize + disability ,data=carcinoma)
+summary(cox2)
+
+
+
+
+###########################################################
+#  The understanding of the code examples presented       #
+#  below will not be necessary for today's main exercise  #
+#  (only needed for the extra part in question 9 and      #
+#  additional exrcise B                          )        #
+###########################################################
+
+
 #------ Simple "visual check" of the proportional hazard assumption for this simple cox model-------
 # We just want to compare the survival curves estimated via the cox model and Kaplan-Meier.
 # Step 1: create "new data" to predict the survival
-dnew1 <- data.frame(trt=1)
-dnew0 <- data.frame(trt=0)
+dnew1 <- data.frame(trt=factor(1))
+dnew0 <- data.frame(trt=factor(0))
 # Step 2:  predict/estimate the survival probabilities for both groups using the Cox model
 scox1 <- survfit(cox1,newdata=dnew1) 
 scox0 <- survfit(cox1,newdata=dnew0)
@@ -96,38 +129,6 @@ lines(scox1$time,scox1$surv,col="black",type="s",lwd=3,lty=2)
 legend("right",legend=c("Experimental","Standard"),lwd=3,lty=2,col=c("black","grey50"),title="Cox model estimates:   ",bty="n")
 legend("topright",legend=c("Experimental","Standard"),lwd=2,lty=1,col=c("orange","blue"),title="Kaplan-Meier estimates:",bty="n")
 #------------
-
-
-# Restricted Mean Survival Time (RMST) analysis
-ResRMST <- rmst2(time=carcinoma$time/365, # trick: divide by 365 to have a time unit in years
-                 status=carcinoma$status,
-                 arm=carcinoma$trt,
-                 tau=3) # Beware of the time unit!
-ResRMST
-
-
-# Data management: make factor variables
-carcinoma$trt <- factor(carcinoma$trt)
-carcinoma$Tsize <- factor(carcinoma$T<=2,
-                          levels=c(TRUE,FALSE),
-                          labels=c("<=4cm",">4cm"))
-carcinoma$disability <- factor(carcinoma$cond==1,
-                               levels=c(TRUE,FALSE),
-                               labels=c("No","Yes"))
-
-# multiple cox regression
-cox2 <- coxph(Surv(time,status)~trt+ age+ Tsize + disability ,data=carcinoma)
-summary(cox2)
-
-
-
-
-
-##########################################################
-#  The understanding of the code examples presented      #
-#  below will not be necessary for today's exercise      #
-#  (except for the extra part "For those who need more") #
-##########################################################
 
 
 

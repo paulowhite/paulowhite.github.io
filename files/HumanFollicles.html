@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-30 Thu 14:36 -->
+<!-- 2025-01-30 Thu 14:52 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>Human follicles culture data</title>
@@ -250,18 +250,18 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#orgc604f5b">Description</a></li>
-<li><a href="#org0743876">Variables</a></li>
-<li><a href="#org4504536">Data download</a></li>
-<li><a href="#org5eb8a98">Load data into R</a></li>
-<li><a href="#org85d3e37">References</a></li>
-<li><a href="#org1d85353">Source</a></li>
+<li><a href="#orgff31a12">Description</a></li>
+<li><a href="#org11405a0">Variables</a></li>
+<li><a href="#orgab0d36d">Data download</a></li>
+<li><a href="#orgc071570">Load data into R</a></li>
+<li><a href="#org5bb67fc">References</a></li>
+<li><a href="#orgee8569c">Source</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-orgc604f5b" class="outline-2">
-<h2 id="orgc604f5b">Description</h2>
-<div class="outline-text-2" id="text-orgc604f5b">
+<div id="outline-container-orgff31a12" class="outline-2">
+<h2 id="orgff31a12">Description</h2>
+<div class="outline-text-2" id="text-orgff31a12">
 <p>
 These data comes from a former student of this PhD course. She
 conducted an experiment to compare different conditions to grow
@@ -281,9 +281,9 @@ cultured for 8 days in media supplemented with 5% fetal bovine serum
 </div>
 
 
-<div id="outline-container-org0743876" class="outline-2">
-<h2 id="org0743876">Variables</h2>
-<div class="outline-text-2" id="text-org0743876">
+<div id="outline-container-org11405a0" class="outline-2">
+<h2 id="org11405a0">Variables</h2>
+<div class="outline-text-2" id="text-org11405a0">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -326,27 +326,27 @@ cultured for 8 days in media supplemented with 5% fetal bovine serum
 
 <tr>
 <td class="org-left">Day0</td>
-<td class="org-left">initial follicle diameter (i.e., at "Day 0", when culture starts)</td>
+<td class="org-left">initial follicle diameter (i.e., at "Day 0", when culture starts) (micrometre)</td>
 </tr>
 
 <tr>
 <td class="org-left">Day2</td>
-<td class="org-left">follicle diameter after 2 days or NA if the follicle is dead</td>
+<td class="org-left">follicle diameter after 2 days or NA if the follicle is dead      (micrometre)</td>
 </tr>
 
 <tr>
 <td class="org-left">Day4</td>
-<td class="org-left">follicle diameter after 4 days or NA if the follicle is dead</td>
+<td class="org-left">follicle diameter after 4 days or NA if the follicle is dead  (micrometre)</td>
 </tr>
 
 <tr>
 <td class="org-left">Day6</td>
-<td class="org-left">follicle diameter after 6 days or NA if the follicle is dead</td>
+<td class="org-left">follicle diameter after 6 days or NA if the follicle is dead  (micrometre)</td>
 </tr>
 
 <tr>
 <td class="org-left">Day8</td>
-<td class="org-left">follicle diameter after 8 days or NA if the follicle is dead</td>
+<td class="org-left">follicle diameter after 8 days or NA if the follicle is dead              (micrometre)</td>
 </tr>
 </tbody>
 </table>
@@ -354,9 +354,10 @@ cultured for 8 days in media supplemented with 5% fetal bovine serum
 </div>
 
 
-<div id="outline-container-org4504536" class="outline-2">
-<h2 id="org4504536">Data download</h2>
-<div class="outline-text-2" id="text-org4504536">
+
+<div id="outline-container-orgab0d36d" class="outline-2">
+<h2 id="orgab0d36d">Data download</h2>
+<div class="outline-text-2" id="text-orgab0d36d">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -387,20 +388,21 @@ cultured for 8 days in media supplemented with 5% fetal bovine serum
 </div>
 
 
-<div id="outline-container-org5eb8a98" class="outline-2">
-<h2 id="org5eb8a98">Load data into R</h2>
-<div class="outline-text-2" id="text-org5eb8a98">
+<div id="outline-container-orgc071570" class="outline-2">
+<h2 id="orgc071570">Load data into R</h2>
+<div class="outline-text-2" id="text-orgc071570">
 <div class="org-src-container">
-<pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/HFollicles.rda"</span>)) head(HFollicles)
+<pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/HFollicles.rda"</span>))
+head(HFollicles)
 </pre>
 </div>
 </div>
 </div>
 
 
-<div id="outline-container-org85d3e37" class="outline-2">
-<h2 id="org85d3e37">References</h2>
-<div class="outline-text-2" id="text-org85d3e37">
+<div id="outline-container-org5bb67fc" class="outline-2">
+<h2 id="org5bb67fc">References</h2>
+<div class="outline-text-2" id="text-org5bb67fc">
 <p>
 Adrados, Cristina Subiran, et al. "Human platelet lysate improves the
 growth and survival of cultured human pre-antral follicles."
@@ -410,9 +412,9 @@ Reproductive BioMedicine Online 47.5
 </div>
 </div>
 
-<div id="outline-container-org1d85353" class="outline-2">
-<h2 id="org1d85353">Source</h2>
-<div class="outline-text-2" id="text-org1d85353">
+<div id="outline-container-orgee8569c" class="outline-2">
+<h2 id="orgee8569c">Source</h2>
+<div class="outline-text-2" id="text-orgee8569c">
 <p>
 Supplementary material of the publication cited above.
 </p>
@@ -420,7 +422,7 @@ Supplementary material of the publication cited above.
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-01-30 Thu 14:36</p>
+<p class="date">Created: 2025-01-30 Thu 14:52</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

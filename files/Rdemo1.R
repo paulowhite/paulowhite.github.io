@@ -13,16 +13,17 @@ data(migraine)
 head(migraine)
 
 # make a barplot (of counts)
-barplot(migraine$ntrt,
-        col=1:nrow(migraine),
-        names=migraine$dose,
+barplot(migraine$ntrt,        # should be a table or counts
+        col=1:nrow(migraine), # to color the bars
+        names=migraine$dose,  # names under the bars
         xlab="Dose (mg)",
         ylab="n. of patients")
 
 # make a barplot (of frequencies)
-barplot(100*migraine$ntrt/sum(migraine$ntrt),
-        col=1:nrow(migraine),
-        names=migraine$dose,
+MyFreq <- 100*migraine$ntrt/sum(migraine$ntrt) # compute frequencies (%)
+barplot(MyFreq,
+        col="blue",
+        names=migraine$dose,  
         xlab="Dose (mg)",
         ylab="Patients (%)" )
 
@@ -56,17 +57,18 @@ mean(melanoma$thick)
 sd(melanoma$thick)
 
 # Same with log of tumor  thickness instead of tumor thickness
-hist(log(melanoma$thick),xlab="Log of tumor thickness in 1/100 mm",main="",col="grey")
-mean(log(melanoma$thick))
-sd(log(melanoma$thick))
+logThick <- log(melanoma$thick)
+hist(logThick,xlab="Log of tumor thickness in 1/100 mm",main="",col="grey")
+mean(logThick)
+sd(logThick)
 
 # normal range of log-thickness (rounded, 2 digits)
-round(c(mean(log(melanoma$thick)) - 2*sd(log(melanoma$thick)),
-        mean(log(melanoma$thick)) + 2*sd(log(melanoma$thick))),2)
+round(c(mean(logThick) - 2*sd(logThick),
+        mean(logThick) + 2*sd(logThick),2))
 
-# normal range back transformed
-exp(round(c(mean(log(melanoma$thick)) - 2*sd(log(melanoma$thick)),
-            mean(log(melanoma$thick)) + 2*sd(log(melanoma$thick))),2))
+# normal range back transformed (rounded, 1 digit)
+round(exp(c(mean(logThick) - 2*sd(logThick),
+            mean(logThick) + 2*sd(logThick))),1)
 
 # quantiles
 quantile(melanoma$thick) # min, Q1, Q2=median, Q3, max
@@ -74,8 +76,11 @@ median(melanoma$thick)   # median only
 quantile(melanoma$thick,probs=0.25) # we can specify any quantile we want (here 25%).
 
 
-# boxplot
-boxplot(melanoma$thick~factor(melanoma$ulc,levels=c(0,1),labels=c("no","yes")),
+# boxplot (per ulc group)
+melanoma$ulc <- factor(melanoma$ulc,         # first make a factor variable and
+                       levels=c(0,1),        # make it clear that 0/1 mean no/yes
+                       labels=c("no","yes")) 
+boxplot(melanoma$thick~melanoma$ulc,
         xlab="Ulceration",
         ylab="Tumor thickness (1/100 mm)")
 
@@ -85,11 +90,11 @@ abline(0,1,col="red",lty=2,lwd=3)
 # Note: scale does substract the mean and devide by sd, i.e. it standardizes.
 
 # Similar QQplot for log-thickness
-qqnorm(scale(log(melanoma$thick)),main="QQplot of log-tumor thickness:\n log-transformed data")
+qqnorm(scale(logThick),main="QQplot of log-tumor thickness:\n log-transformed data")
 abline(0,1,col="red",lty=2,lwd=3)
 
 # Wally plot
-melanoma$logthick <- log(melanoma$thick) # create new variable =log(thickness)
+melanoma$logthick <- log(melanoma$thick) # create new variable and add to dataset  =log(thickness)
 lm0 <- lm(logthick~1,data=melanoma)
 qqnorm.wally <- function(x, y, ...) { qqnorm(y, ...) ; abline(a=0, b=1) } #  Define function to plot a QQplot with an identity line
 wallyplot(lm0, FUN=qqnorm.wally, main="",hide=FALSE,col="blue")
@@ -125,7 +130,8 @@ qt(p=0.975,df=9) # 97.5% with 9 degrees of freedom
 predict(lm(log(melanoma$thick)~1),interval="confidence")[1,]      # of log-thickness of the tumor
 t.test(log(melanoma$thick)) # just a computational trick to compute the same
 exp(predict(lm(log(melanoma$thick)~1),interval="confidence")[1,]) # back-transformed
-# same computation "by hand"
+
+# appendix: same computation "by hand"
 xbar <- mean(log(melanoma$thick)) # compute mean
 s <- sd(log(melanoma$thick))      # compute sd
 n <- length(log(melanoma$thick))  # sample size n
@@ -136,5 +142,9 @@ exp(c(xbar,xbar - t*s/sqrt(n), xbar + t*s/sqrt(n))) # back-transformed
 
 # 95% prediction interval
 predict(lm(log(melanoma$thick)~1),interval="prediction")[1,] # log-thickness
-exp(c(xbar - t*s*sqrt(1+1/n), xbar + t*s*sqrt(1+1/n)))       # back-transformed
+exp(predict(lm(log(melanoma$thick)~1),interval="prediction")[1,]) # back-transformed
+
+# appendix: same computation "by hand"
 c(xbar - t*s*sqrt(1+1/n), xbar + t*s*sqrt(1+1/n))  # log-thickness, "by hand"
+exp(c(xbar - t*s*sqrt(1+1/n), xbar + t*s*sqrt(1+1/n)))       # back-transformed
+

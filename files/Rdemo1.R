@@ -64,7 +64,7 @@ sd(logThick)
 
 # normal range of log-thickness (rounded, 2 digits)
 round(c(mean(logThick) - 2*sd(logThick),
-        mean(logThick) + 2*sd(logThick),2))
+        mean(logThick) + 2*sd(logThick)),2)
 
 # normal range back transformed (rounded, 1 digit)
 round(exp(c(mean(logThick) - 2*sd(logThick),

@@ -30,11 +30,12 @@ plot(x=th$log2conc,
      ylab='log2(Diameter)',
      xlab='log2(Concentration)',col="red",pch=19)
 
-# Add regression line
-abline(lm(log2diam~log2conc,data=th),col="blue",lwd=3,lty=1)
-
 # Fit a linear regression model
 lm1 <- lm(log2diam~log2conc,data=th)
+
+# Add the regression line to the previous plot
+abline(lm1,col="blue",lwd=3,lty=1)
+
 # Print the summary of the fit
 summary(lm1)
 
@@ -53,7 +54,7 @@ cbind(coef(lm1), confint(lm1))
 # Prediction for a concentration of 250,000 cells/ms
 x0 <- log2(250000)
 predict(lm1,newdata=data.frame(log2conc=x0))
-# Compute the predicted value "by hand"
+# Compute the predicted value "by hand" (just for academic purpose)
 lm1$coef[1]+x0*lm1$coef[2]
 # back-transformed
 2^(predict(lm1,newdata=data.frame(log2conc=x0)))

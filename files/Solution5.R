@@ -1,6 +1,6 @@
 #' ---
 #' title: "Exercise 5 - solution"
-#' author: "Paul Blanche"
+#' author: "Alessandra Meddis"
 #' output: pdf_document
 #' fontsize: 12pt
 #' ---
@@ -161,6 +161,7 @@ chisq.test(table(smoker=d$smoker,death=d$death))
 #' We now use the fonction **table2x2()** from the **Publish** package to estimate several association measures, with confidence intervals. We start with the survival probability difference:
 #' 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+d$death<-relevel(d$death, ref= "yes")
 Tab1 <- table(smoker=d$smoker,death=d$death)
 library(Publish)
 table2x2(Tab1,stats = c("table","rd"))
@@ -168,24 +169,21 @@ table2x2(Tab1,stats = c("table","rd"))
 #' 
 #' We can first check that the survival probability estimates match the previous results. We have:
 #' 
-#'  - Non-smokers: 68.6%, which is indeed equal to 100 - 31.4
-#'  - Non-smokers: 76.1%, which is indeed equal to 100 - 23.9
-#' 
-#' We finally conclude that the estimated survival chance difference is 7.5%  (95% CI= [12.4;2.7]).
-#' 
+## 31.4% : 20-year risk of death for non smokers
+## 23.9% : 20-year risk of death for smokers
+#
+## The estimated risk difference is 7.5%  (CI_95%: [2.7; 12.4])
 #' We now compute the ratio of the survival probabilities.
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 table2x2(Tab1,stats = c("rr"))
 
-#' 
-#' The estimated survival ratio is 0.901 (95% CI=[0.843;0.963]). Equivalently, we can also say that the chance of survival is 1-0.901= 9.9% lower for non smokers than for smokers (95% CI=[3.7;15.7]). 
-#' 
+## The estimated risk ratio is 1.316 (CI_95%: [1.099;1.575]).
 #' Finally, we now compute the survival odds ratio.
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 table2x2(Tab1,stats = c("or"))
 
 #' 
-#' The estimated survival odds ratio is 0.685 (95% CI=[0.535;0.876]).
+# The estimated survival odds ratio is  1.460 (CI_95%: [1.141;1.868]).
 #' 
 #' 
 #' ## Question 6
@@ -212,9 +210,9 @@ barplot(Tab2,beside=TRUE,
 #' 
 #' ## Question 7
 #' 
-#' We now produce a barplot to compare the 20-year survival probability in each age group. 
+#' We now produce a barplot to compare the 20-year risk in each age group. 
 #' 
-#' We first compute the frequency table, and then compute the survival probabilities.
+#' We first compute the frequency table, and then compute the  probabilities.
 #' 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Tab3 <- table(d$death,d$age) # counts
@@ -223,18 +221,19 @@ Tab4 <- prop.table(Tab3,margin=2) # proportions per age
 Tab4 
 
 #' 
-#' We are now ready to plot the 20-year survival probabilities in each age group.
+#' We are now ready to plot the 20-year risk of death in each age group.
 ## ---- fig.height=5,fig.width=6------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 barplot(100*Tab4[1,],
         xlab="age",
-        ylab="20-year survival probability (%)",
+        ylab="20-year risk of death (%)",
         col="black")
 
 #' 
-#' We can observe that the older the women, the less likely they survive 20 years. This seems to make perfect sense. 
+#' We can observe that the older the women, the more likely they die 20 years. This seems to make perfect sense. 
 #' 
 #' ## Question 8
-#' We now produce a barplot to compare the 20-year survival probability in each age group, between smokers and non smokers. First, we compute the survival probabilities in each age group.
+#' We now produce a barplot to compare the 20-year risk of death in each age group, between smokers and non smokers.
+#' # First, we compute the risk of death in each age group.
 #' 
 ## -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Tab3smokers <- table(d$death[d$smoker=="yes"],
@@ -258,18 +257,18 @@ Tab5
 barplot(Tab5,
         beside=TRUE,
         xlab="age",
-        ylab="20-year survival probability",
+        ylab="20-year risk of death",
         legend=TRUE)
 
 #' 
-#' We see observe that in all age groups, the 20-year survival
-#' probability is lower for smokers than for non-smokers. This makes
+#' We see observe that in all age groups, the 20-year risk
+#' is higher for smokers than for non-smokers. This makes
 #' sense, we know that smoking is not healthy. We also observe that there
-#' is a substantial difference in 20-year survival probability between
+#' is a substantial difference in 20-year risk between
 #' age groups. This makes sense, the older a women, the more likely she
 #' cannot survive 20 years. Finally, we observe that the differences in
-#' 20-year survival probability between age groups are substantially
-#' larger than the differences in 20-year survival between smoker
+#' 20-year risk of death between age groups are substantially
+#' larger than the differences in 20-year risk between smoker
 #' and non smokers, when comparing women of the same age group. This
 #' makes sense: smoking is bad, but not as bad as becoming old (for the
 #' 20-year risk of death).
@@ -301,10 +300,10 @@ table2x2(Tab1a,stats = c("table","rr"))
 #' 
 #' We can proceed similarly for the other age groups and obtain:
 #' 
-#'  - Age group below 45: estimated risk ratio 1.030 (95% CI= [0.992;1.069]).
-#'  - Age group 45-54: estimated risk ratio 1.068 (95% CI= [0.938;1.215]).
-#'  - Age group 55-64: estimated risk ratio 1.203 (95% CI= [0.979;1.478]).
-#'  - Age group above 65: estimated risk ratio 1.016 (95% CI= [0.472;2.186]).
+# - Age group below 45: estimated risk ratio 0.580 (CI_95%: [0.291;1.153]).
+# - Age group 45-54: estimated risk ratio 0.741 (CI_95%: [0.399;1.376]).
+# - Age group 55-64: estimated risk ratio  0.745 (CI_95%: [0.538;1.033]).
+# - Age group above 65: estimated risk ratio 0.997 (CI_95%: [0.877;1.134]).
 #' 
 #' There is no significant difference in any age group, although there
 #' seems to be a systematic trend towards a higher 20-year risk of death

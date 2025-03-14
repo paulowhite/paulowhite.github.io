@@ -3,7 +3,7 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
-<!-- 2025-01-30 Thu 11:19 -->
+<!-- 2025-03-14 Fri 15:12 -->
 <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>(Simulated) Knee Surgery data</title>
@@ -250,37 +250,42 @@ for the JavaScript code in this tag.
 <h2>Table of Contents</h2>
 <div id="text-table-of-contents">
 <ul>
-<li><a href="#org6fc2e29">Description</a></li>
-<li><a href="#org2d4b8ff">Variables</a></li>
-<li><a href="#orge772bed">Data download</a></li>
-<li><a href="#org8813e20">Load data into R</a></li>
-<li><a href="#orgc0fc7ed">Source</a></li>
+<li><a href="#org03b3ffe">Description</a></li>
+<li><a href="#org08a9029">Variables</a></li>
+<li><a href="#org8dd1465">Data download</a></li>
+<li><a href="#org8b0ea3d">Load data into R</a></li>
+<li><a href="#org0de6c24">Source</a></li>
 </ul>
 </div>
 </div>
-<div id="outline-container-org6fc2e29" class="outline-2">
-<h2 id="org6fc2e29">Description</h2>
-<div class="outline-text-2" id="text-org6fc2e29">
+<div id="outline-container-org03b3ffe" class="outline-2">
+<h2 id="org03b3ffe">Description</h2>
+<div class="outline-text-2" id="text-org03b3ffe">
 <p>
-These data are simulated data that closely resembles that of a recent
-multicentre randomized clinical trial. The aim of the trial was to
-compare two surgery techniques to treat osteoarthritis of the knee. An
-important outcome of the trial was the
-<a href="https://en.wikipedia.org/wiki/Oxford_Knee_Score"> Oxford Knee Score</a>
-at 24 months after surgery. In short, this score summarizes the
-answers to twelve questions about function and pain associated with
-the knee and ranges from 0 to 48 (the higher the better). As is usual
-for such trials, the scores were collected not only at the end of
-follow-up (2 years) but also just before surgery and at a couple of
-earlier timepoints (e.g., at 1 year after the surgery).
+These data are <b>simulated</b> data that closely resembles that of a
+recent multicentre randomized clinical trial. The aim of the trial was
+to compare two surgery techniques to treat osteoarthritis of the
+knee. An important outcome of the trial was the
+<a href="https://en.wikipedia.org/wiki/Oxford_Knee_Score"> Oxford Knee
+Score</a> at 24 months after surgery. In short, this score summarizes
+the answers to twelve questions about function and pain associated
+with the knee and ranges from 0 to 48 (the higher the better). As is
+usual for such trials, the scores were collected not only at the end
+of follow-up (2 years) but also just before surgery and at a couple of
+earlier timepoints. More precisely, at 1, 6, 12 and 24 months after
+surgery, the patients were invited to reply to an electronic
+questionnaire. The Oxford knee score was computed from their
+replies. Subjects who did not reply electronically within a reasonable
+time frame were contacted by phone, to have the opportunity to answer
+the questionnaire orally.
 </p>
 </div>
 </div>
 
 
-<div id="outline-container-org2d4b8ff" class="outline-2">
-<h2 id="org2d4b8ff">Variables</h2>
-<div class="outline-text-2" id="text-org2d4b8ff">
+<div id="outline-container-org08a9029" class="outline-2">
+<h2 id="org08a9029">Variables</h2>
+<div class="outline-text-2" id="text-org08a9029">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -345,9 +350,9 @@ earlier timepoints (e.g., at 1 year after the surgery).
 </div>
 </div>
 
-<div id="outline-container-orge772bed" class="outline-2">
-<h2 id="orge772bed">Data download</h2>
-<div class="outline-text-2" id="text-orge772bed">
+<div id="outline-container-org8dd1465" class="outline-2">
+<h2 id="org8dd1465">Data download</h2>
+<div class="outline-text-2" id="text-org8dd1465">
 <table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
 
 
@@ -379,9 +384,9 @@ earlier timepoints (e.g., at 1 year after the surgery).
 
 
 
-<div id="outline-container-org8813e20" class="outline-2">
-<h2 id="org8813e20">Load data into R</h2>
-<div class="outline-text-2" id="text-org8813e20">
+<div id="outline-container-org8b0ea3d" class="outline-2">
+<h2 id="org8b0ea3d">Load data into R</h2>
+<div class="outline-text-2" id="text-org8b0ea3d">
 <div class="org-src-container">
 <pre class="src src-R"><span style="color: #7fffd4;">load</span>(url(<span style="color: #ffa07a;">"http://paulblanche.com/files/kneeSurgery.rda"</span>))
 head(kneeSurgery)
@@ -392,9 +397,9 @@ head(kneeSurgery)
 
 
 
-<div id="outline-container-orgc0fc7ed" class="outline-2">
-<h2 id="orgc0fc7ed">Source</h2>
-<div class="outline-text-2" id="text-orgc0fc7ed">
+<div id="outline-container-org0de6c24" class="outline-2">
+<h2 id="org0de6c24">Source</h2>
+<div class="outline-text-2" id="text-org0de6c24">
 <p>
 Simulated data 
 </p>
@@ -402,7 +407,7 @@ Simulated data
 </div>
 </div>
 <div id="postamble" class="status">
-<p class="date">Created: 2025-01-30 Thu 11:19</p>
+<p class="date">Created: 2025-03-14 Fri 15:12</p>
 <p class="validation"><a href="http://validator.w3.org/check?uri=referer">Validate</a></p>
 </div>
 </body>

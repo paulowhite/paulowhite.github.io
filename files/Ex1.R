@@ -5,8 +5,8 @@
 #' fontsize: 12pt
 #' ---
 #' 
-## ----setup, include=FALSE-----------------------------------------------------
-knitr::opts_chunk$set(echo = TRUE,eval=FALSE,warning=FALSE)
+## ----setup, include=FALSE------------------------------------------------
+knitr::opts_chunk$set(echo = TRUE,eval= FALSE, warning=FALSE)
 rm(list=ls())
 
 #' 
@@ -41,20 +41,20 @@ rm(list=ls())
 #' ## Preliminaries
 #' 
 #' We first load the data and have a look a the first lines. 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 library(survival)
 d <- rotterdam # for convenience
 head(d)        # print first lines
 
 #' 
 #' We then create a new `status` variable and change the time scale from days to year (for convenience).
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 d$time <- d$rtime/ 365.25
 d$status <- d$recur
 
 #' 
 #' We get basic descriptive statistics for all variables.
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 summary(d)
 
 #' 
@@ -67,7 +67,7 @@ summary(d)
 #' realistic model and keeping it simple enough for the interpretation
 #' and pre-specification (also an interesting bias-variance tradeoff).
 #' 
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 d$yearcat <- cut(d$year,include.lowest=TRUE,
                  breaks=c(1978,1985,1988,1990,1993))
 d$agecat <- cut(d$age,include.lowest=TRUE,
@@ -81,12 +81,12 @@ d$ercat <- cut(d$er,include.lowest=TRUE,
 
 #'    
 #' We print simple descriptive statistics for all the created variables.
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 summary(d[,grep("cat",names(d))],maxsum=9)
 
 #' 
 #' Transform some variables to factor variables.
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 d$chemo <- factor(d$chemo) # chemotherapy (treatment)
 d$grade <- factor(d$grade)
 
@@ -99,7 +99,7 @@ d$grade <- factor(d$grade)
 #' `survival` package could have done the job too). We focus on the
 #' results at t=5 years.
 #' 
-## ----fig.width=7,fig.height=6-------------------------------------------------
+## ----fig.width=7,fig.height=6--------------------------------------------
 library(prodlim) 
 fitKM <- prodlim(Hist(time, status) ~ chemo, data = d)
 summary(fitKM,time=5)            # print estimated survival at t=5
@@ -134,7 +134,7 @@ abline(v=5,lwd=2,col="blue",lty=2)
 #' the groups (columns in the table), right of symbol `~`  to define the rows. 
 #' Using `Q(age)` instead of simply `age` is to compute median and quartiles 
 #' instead of mean and sd.
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 library(Publish)
 Table1 <- univariateTable(chemo~yearcat + Q(age) + meno +
                               size + factor(grade) + Q(nodes)
@@ -158,7 +158,7 @@ Table1
 #' Accordingly, it does the same as just changing `status` by `status2` 
 #' after defining `d$status2=1-d$status`, when running the code without using 
 #' the `reverse=TRUE` option (except for the smart handling of ties).
-## ----fig.width=7,fig.height=6-------------------------------------------------
+## ----fig.width=7,fig.height=6--------------------------------------------
 fitKMC <- prodlim(Hist(time, status) ~ chemo,
                   data = d,reverse=TRUE) 
 plot(fitKMC,xlim=c(0,6),
@@ -178,7 +178,7 @@ abline(v=5,lwd=2,col="blue",lty=2)
 #'  -  alive recurrence free at 5 years
 #'  
 #' Do you confirm that many patients are lost of follow-up within 5 years?
-## ----fig.width=7,fig.height=5-------------------------------------------------
+## ----fig.width=7,fig.height=5--------------------------------------------
 sum(d$time <=5 & d$status==1)
 sum(d$time <=5 & d$status==0)
 sum(d$time >5)
@@ -196,7 +196,7 @@ sum(d$time >5)
 #' treatment group. What can we conclude about the chemotherapy, from the
 #' fitted model?
 #' 
-## ----fig.width=7,fig.height=5-------------------------------------------------
+## ----fig.width=7,fig.height=5--------------------------------------------
 library(mets)
 out.oipcw <- binreg(Event(time, status) ~ chemo +
                         yearcat + agecat + meno +
@@ -204,7 +204,8 @@ out.oipcw <- binreg(Event(time, status) ~ chemo +
                         pgrcat + ercat + hormon, # logistic model
                     data=d,
                     time=5,                      # time horizon
-                    cens.model=~strata(chemo))   # censoring model
+                    cens.model=~strata(chemo),   # censoring model
+                    type="I")  # (needed with new version of package, i.e., 1.3.7)
 summary(out.oipcw)
 
 #' 
@@ -215,11 +216,12 @@ summary(out.oipcw)
 #' 1**? At which slide of the lecture did we mentioned this result? Is it
 #' reassuring?
 #' 
-## ----fig.width=7,fig.height=5-------------------------------------------------
+## ----fig.width=7,fig.height=5--------------------------------------------
 out.oipcw.unadj <- binreg(Event(time, status) ~ chemo,
-                    data=d,
-                    time=5,
-                    cens.model=~strata(chemo))
+                          data=d,
+                          time=5,
+                          cens.model=~strata(chemo),
+                          type="I")  # (needed with new version of package, i.e., 1.3.7))
 summary(out.oipcw.unadj)     # fitted logistic model
 expit <- function(x) exp(x)/(1+exp(x))
 expit(coef(out.oipcw.unadj)[1]) # estimated risk for chemo=0
@@ -232,7 +234,7 @@ summary(fitKM,time=5,surv=FALSE) # print estimated risk instead (1-surv)
 #' 
 #' Use the "weighed estimating equations" approach  (ipcw-glm) instead as
 #' a sensitivity analysis. Is there a substantial difference in the results?
-## ----fig.width=7,fig.height=5-------------------------------------------------
+## ----fig.width=7,fig.height=5--------------------------------------------
 out.ipcw.glm <- logitIPCW(Event(time, status) ~ chemo +
                               yearcat + agecat + meno +
                               size + grade + nodescat +
@@ -250,7 +252,7 @@ cbind(ipcw.glm=coef(out.ipcw.glm),oipcw=coef(out.oipcw)) # head to head comparis
 #' for a patient randomized to chemotherapy versus that for of a patient randomized 
 #' to no chemotherapy. We will use the same logistic regression model as above. What 
 #' is the risk difference? What can we conclude? 
-## ----fig.width=7,fig.height=5-------------------------------------------------
+## ----fig.width=7,fig.height=5--------------------------------------------
 ateFit <- binregATE(Event(time, status) ~ chemo +
                         yearcat + agecat + meno +
                         size + grade + nodescat +
@@ -258,7 +260,9 @@ ateFit <- binregATE(Event(time, status) ~ chemo +
                     data=d,
                     time=5,
                     treat.model=chemo~1,
-                    cens.model=~strata(chemo))
+                    cens.model=~strata(chemo),
+                    model="logit",  # (needed with new version of package, i.e., 1.3.7))
+                    type="I")       # (needed with new version of package, i.e., 1.3.7))
 summary(ateFit)
 
 #' 
@@ -267,7 +271,7 @@ summary(ateFit)
 #' (risk difference with 95-CI and p-value) and we check that they
 #' match the plot produced at **Question 1**. We can do that conveniently using 
 #' the `timeEL` package.
-## ----fig.width=7,fig.height=5-------------------------------------------------
+## ----fig.width=7,fig.height=5--------------------------------------------
 library(timeEL)
 DiffRisk.unadj <- TwoSampleKaplanMeier(time=d$time,
                                     status=d$status,
@@ -292,7 +296,7 @@ summary(fitKM,time=5,surv=FALSE) # print estimated risk instead (1-surv)
 #' adjusted and unadjusted results?
 #' 
 #' 
-## ----fig.width=15,fig.height=10-----------------------------------------------
+## ----fig.width=15,fig.height=10------------------------------------------
 d$nodes01 <- ifelse(d$nodes<2,"0-1","2+")
 tabconf <- round(prop.table(table(nodes=d$nodes01,
                                   chemo=d$chemo),margin=2)*100,1)
@@ -304,6 +308,6 @@ barplot(tabconf[1,],ylab="Pr(n. nodes <=1), in %",xlab="chemo")
 
 #' 
 #' ## Appendix: package versions
-## -----------------------------------------------------------------------------
+## ------------------------------------------------------------------------
 sessionInfo()
 

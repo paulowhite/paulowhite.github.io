@@ -6,7 +6,7 @@ fontsize: 12pt
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE,eval=FALSE,warning=FALSE)
+knitr::opts_chunk$set(echo = TRUE,eval= FALSE, warning=FALSE)
 rm(list=ls())
 ```
 
@@ -204,7 +204,8 @@ out.oipcw <- binreg(Event(time, status) ~ chemo +
                         pgrcat + ercat + hormon, # logistic model
                     data=d,
                     time=5,                      # time horizon
-                    cens.model=~strata(chemo))   # censoring model
+                    cens.model=~strata(chemo),   # censoring model
+                    type="I")  # (needed with new version of package, i.e., 1.3.7)
 summary(out.oipcw)
 ```
 
@@ -217,9 +218,10 @@ reassuring?
 
 ```{r,fig.width=7,fig.height=5}
 out.oipcw.unadj <- binreg(Event(time, status) ~ chemo,
-                    data=d,
-                    time=5,
-                    cens.model=~strata(chemo))
+                          data=d,
+                          time=5,
+                          cens.model=~strata(chemo),
+                          type="I")  # (needed with new version of package, i.e., 1.3.7))
 summary(out.oipcw.unadj)     # fitted logistic model
 expit <- function(x) exp(x)/(1+exp(x))
 expit(coef(out.oipcw.unadj)[1]) # estimated risk for chemo=0
@@ -258,7 +260,9 @@ ateFit <- binregATE(Event(time, status) ~ chemo +
                     data=d,
                     time=5,
                     treat.model=chemo~1,
-                    cens.model=~strata(chemo))
+                    cens.model=~strata(chemo),
+                    model="logit",  # (needed with new version of package, i.e., 1.3.7))
+                    type="I")       # (needed with new version of package, i.e., 1.3.7))
 summary(ateFit)
 ```
 

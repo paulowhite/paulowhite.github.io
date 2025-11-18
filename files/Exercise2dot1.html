@@ -264,7 +264,35 @@ c(z=z.unadjusted,p=2*(1-pnorm(z.unadjusted)))</code></pre>
 <li>Again, some might argue that the modeling choices are too simple to be true. What could you reply to defend your choices?</li>
 <li>Do you trust the result of the confidence interval as much as that of the p-value?</li>
 </ul>
-<p><code>r    # First we source the script with the helper function    # (as mentioned in the introduction above)    source(&quot;http://paulblanche.com/files/HelperRS.R&quot;)       # To use the function, we need two steps of  data management.    # First, we create a 0/1 variable for the arm    d$A &lt;- as.numeric(d$trt==&quot;tPA&quot;)    #  Second, we select the data for covariate adjustment    dAdj &lt;- d[,c(&quot;ageC&quot;,&quot;tachycardia&quot;,&quot;hypotension&quot;,&quot;Killip&quot;,&quot;MIlocation&quot;,&quot;smoking&quot;)]    # We now use the function to compute estimates    est &lt;- stand.est(Y=d$Death30d, A=d$A, W=dAdj)    est # print the results    # Then we use the function to compute standard error via bootstrapping.    # We need set the seed for reproducibility. To not wait too long, we use    # n.boot=400 bootstrapped samples. In practice, use more, e.g., 1000.    # But,  400 is usually sufficient to provide a reliable SEs.    set.seed(30102025)     Res.var.est &lt;- var.stand.est(Y=d$Death30d, A=d$A, W=dAdj,                                 n.boot=400, Trace=TRUE)    # Compute SE and z-statistic    SE.diff &lt;- sqrt(Res.var.est[[&quot;Var.Diff&quot;]])    z &lt;- abs(est[&quot;Diff&quot;])/SE.diff    # results of regression standardization (risk difference), with 95%-CI and p-value    Res.rs &lt;- c(Est=est[&quot;Diff&quot;],                lower=est[&quot;Diff&quot;] - qnorm(0.975)*SE.diff,                upper=est[&quot;Diff&quot;] + qnorm(0.975)*SE.diff,                p.value=2*(1-pnorm(z)))    Res.rs    # to better read, show in % and present only 5 digits for the p-value    c(paste0(round(Res.rs[1:3]*100,2),&quot;%&quot;),round(Res.rs[4],5))</code></p>
+<pre class="r"><code># First we source the script with the helper function
+# (as mentioned in the introduction above)
+source(&quot;http://paulblanche.com/files/HelperRS.R&quot;)   
+# To use the function, we need two steps of  data management.
+# First, we create a 0/1 variable for the arm
+d$A &lt;- as.numeric(d$trt==&quot;tPA&quot;)
+#  Second, we select the data for covariate adjustment
+dAdj &lt;- d[,c(&quot;ageC&quot;,&quot;tachycardia&quot;,&quot;hypotension&quot;,&quot;Killip&quot;,&quot;MIlocation&quot;,&quot;smoking&quot;)]
+# We now use the function to compute estimates
+est &lt;- stand.est(Y=d$Death30d, A=d$A, W=dAdj)
+est # print the results
+# Then we use the function to compute standard error via bootstrapping.
+# We need set the seed for reproducibility. To not wait too long, we use
+# n.boot=400 bootstrapped samples. In practice, use more, e.g., 1000.
+# But,  400 is usually sufficient to provide a reliable SEs.
+set.seed(30102025) 
+Res.var.est &lt;- var.stand.est(Y=d$Death30d, A=d$A, W=dAdj,
+                             n.boot=400, Trace=TRUE)
+# Compute SE and z-statistic
+SE.diff &lt;- sqrt(Res.var.est[[&quot;Var.Diff&quot;]])
+z &lt;- abs(est[&quot;Diff&quot;])/SE.diff
+# results of regression standardization (risk difference), with 95%-CI and p-value
+Res.rs &lt;- c(Est=est[&quot;Diff&quot;],
+            lower=est[&quot;Diff&quot;] - qnorm(0.975)*SE.diff,
+            upper=est[&quot;Diff&quot;] + qnorm(0.975)*SE.diff,
+            p.value=2*(1-pnorm(z)))
+Res.rs
+# to better read, show in % and present only 5 digits for the p-value
+c(paste0(round(Res.rs[1:3]*100,2),&quot;%&quot;),round(Res.rs[4],5))</code></pre>
 </div>
 <div id="question-7" class="section level1">
 <h1>Question 7</h1>

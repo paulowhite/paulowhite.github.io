@@ -4,6 +4,7 @@ rm(list=ls()) # clear all objects from R memory
 library(survival)
 library(prodlim)
 library(survRM2)
+library(timeEL)
 
 # load  data of first case study (pregnancy in subfertile women) 
 load(url("http://paulblanche.com/files/subfertile.rda"))
@@ -20,7 +21,6 @@ summary(KM1,time=5)
 
 # Print the median survival time estime and 95%-CI
 quantile(KM1)
-
 
 # load  data of second case study (carcinoma randomized clinical trial data) 
 load(url("http://paulblanche.com/files/carcinoma.rda"))
@@ -55,28 +55,15 @@ plot(KM2,
 # Print the survival probability estime and 95%-CI at a time t=2 years in each group
 summary(KM2,time=2*365) # Note: beware of the time unit!
 
-
 # ----- Compute the estimated survival probability difference with 95%-CI and p-value.----
-# First extract (and save) the relevant estimates for each group
-KM2.res <- summary(KM2,time=2*365)          # results for both groups 
-KM20 <- as.matrix(KM2.res[KM2.res$trt==0,c("surv","se.surv")]) # extract results for group trt=0 only
-KM21 <- as.matrix(KM2.res[KM2.res$trt==1,c("surv","se.surv")]) # extract results for group trt=1 only
-# Second, compute the difference
-diffSurv <- KM21[1,"surv"] - KM20[1,"surv"]
-# Third, compute the s.e. of the difference
-seDiffSurv <- sqrt(KM21[1,"se.surv"]^2 + KM20[1,"se.surv"]^2)
-# Now compute the 95% CI 
-lowerDiffSurv <- diffSurv - qnorm(1-0.05/2)*seDiffSurv
-upperDiffSurv <- diffSurv + qnorm(1-0.05/2)*seDiffSurv
-# And the -value
-pvalDiffSurv <- 2*(1-pnorm(abs(diffSurv/seDiffSurv)))
-# Put all the results together 
-ResDiffSurv <- c(Est=diffSurv,
-                 lower=lowerDiffSurv,
-                 upper=upperDiffSurv,
-                 p=pvalDiffSurv)
-# print the difference, 95% CI and p-value
-round(ResDiffSurv,3)
+# Here we use the timeEL package for convenience. 
+carcinoma$timeNum <- as.numeric(carcinoma$time) # Just because this package needs the time to be numeric
+ResDiffSurv <- TwoSampleKaplanMeier(time=carcinoma$timeNum,  # 'time' variable
+                                    status=carcinoma$status, # 'status' variable
+                                    group=carcinoma$trt,     # 'group' variable, needs to be coded 0 or 1
+                                    t=2*365,                 # follow-up time at which to compute the difference
+                                    contr = list(method = "Wald")) # techincal details to make "usual" computation
+print(ResDiffSurv,what="Diff") # Note: show the risk difference (NOT the difference in survival, but it is just the same with opposite sign!)
 # -------------
 
 # log-rank test
@@ -168,25 +155,11 @@ plot(fitAJ,
 summary(fitAJ,time=3) # read at "Cause:  1" for the "main" event (status=1), i.e., hospitalization
 
 # ----- Compute the estimated absolute risk difference  with 95%-CI and p-value.----
-#
-# First extract (and save) the relevant estimates for each group
-fitAJ.res <- summary(fitAJ,time=3)
-fitAJ0 <- as.matrix(fitAJ.res[fitAJ.res$trt==0 & fitAJ.res$cause==1,c("cuminc","se.cuminc")]) # extract results for group trt=0 only
-fitAJ1 <- as.matrix(fitAJ.res[fitAJ.res$trt==1 & fitAJ.res$cause==1,c("cuminc","se.cuminc")]) # extract results for group trt=1 only
-# Second, compute the difference
-diffRisk <- fitAJ1[1,"cuminc"] - fitAJ0[1,"cuminc"]
-# Third, compute the s.e. of the difference
-seDiffRisk <- sqrt(fitAJ1[1,"se.cuminc"]^2 + fitAJ0[1,"se.cuminc"]^2)
-# Now compute the 95% CI 
-lowerDiffRisk <- diffRisk - qnorm(1-0.05/2)*seDiffRisk
-upperDiffRisk <- diffRisk + qnorm(1-0.05/2)*seDiffRisk
-# And the -value
-pvalDiffRisk <- 2*(1-pnorm(abs(diffRisk/seDiffRisk)))
-# Put all the results together 
-ResDiffRisk <- c(Est=diffRisk,
-                 lower=lowerDiffRisk,
-                 upper=upperDiffRisk,
-                 p=pvalDiffRisk)
-# print the difference, 95% CI and p-value
-round(ResDiffRisk,3)
+# Here we use the timeEL package for convenience.
+ResDiffRisk <- TwoSampleAalenJohansen(time=HFactionHosp$time,    # 'time' variable
+                                      cause=HFactionHosp$status, # 'status' or 'cause' variable
+                                      group=HFactionHosp$trt,    # 'group' variable, needs to be coded 0 or 1
+                                      t=3,                       # follow-up time at which to compute the difference
+                                      contr=list(method="Wald")) # techincal details to make "usual" computation
+print(ResDiffRisk, what="Diff")
 #-------------

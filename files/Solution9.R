@@ -160,26 +160,17 @@ summary(KM1,time=7*365)
 #' We now report the estimated difference in 7-year survival probability, together with a
 #' 95%-CI and a p-value.
 ## -----------------------------------------------------------------------------
-# First extract (and save) the relevant estimates for each group
-KM1.res <- summary(KM1,time=7*365) # results for both groups 
-KM10 <- as.matrix(KM1.res[KM1.res$rx=="Obs",c("surv","se.surv")])     # results for group rx="Obs"
-KM11 <- as.matrix(KM1.res[KM1.res$rx=="Lev+5FU",c("surv","se.surv")]) # results for group trt="Lev+5FU"
-# Second, compute the difference
-diffSurv <- KM11[1,"surv"] - KM10[1,"surv"]
-# Third, compute the s.e. of the difference
-seDiffSurv <- sqrt(KM11[1,"se.surv"]^2 + KM10[1,"se.surv"]^2)
-# Now compute the 95% CI 
-lowerDiffSurv <- diffSurv - qnorm(1-0.05/2)*seDiffSurv
-upperDiffSurv <- diffSurv + qnorm(1-0.05/2)*seDiffSurv
-# And the -value
-pvalDiffSurv <- 2*(1-pnorm(abs(diffSurv/seDiffSurv)))
-# Put all the results together 
-ResDiffSurv <- c(Est=diffSurv,
-                 lower=lowerDiffSurv,
-                 upper=upperDiffSurv,
-                 p=pvalDiffSurv)
-# print the difference, 95% CI and p-value
-round(ResDiffSurv,3)
+library(timeEL)
+# 'group' variable, needs to be coded 0 or 1
+d$group01 <- as.numeric(d$rx=="Obs")
+
+ResDiffSurv <- TwoSampleKaplanMeier(time=d$timeD, 
+                                    status=d$statusD, 
+                                    group=d$group01,     
+                                    t=7*365,                 
+                                    contr = list(method = "Wald")) 
+
+print(ResDiffSurv,what="Diff")
 
 #' 
 #' We read that we estimate a statistically significant difference of
@@ -251,7 +242,7 @@ round(rev(1-exp(confint(cox1)))*100,1)
 #' Kaplan-Meier or a univariate Cox model. This is to check the
 #' proportional hazards assumption of the Cox model.
 #' 
-## ---- fig.height=7,fig.width=7------------------------------------------------
+## ----fig.height=7,fig.width=7-------------------------------------------------
 # Step 1: create "new data" to predict the survival
 dnew1 <- data.frame(rx="Obs")
 dnew0 <- data.frame(rx="Lev+5FU")
@@ -380,14 +371,14 @@ summary(cox2c)
 #' 
 #' ## Question 1
 #' 
-## ---- fig.height=7,fig.width=7------------------------------------------------
+## ----fig.height=7,fig.width=7-------------------------------------------------
 AJ1 <- prodlim(Hist(time,status)~rx,data=d)
 plot(AJ1,timeconverter="days2years") 
 
 #' 
 #' ## Question 2
 #' 
-## ---- fig.height=7,fig.width=7------------------------------------------------
+## ----fig.height=7,fig.width=7-------------------------------------------------
 KMPFS <- prodlim(Surv(time,status!=0)~rx,data=d)
 plot(KMPFS,timeconverter="days2years",ylab="Progression-Free Survival")
 

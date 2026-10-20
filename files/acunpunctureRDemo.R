@@ -4,6 +4,7 @@ rm(list=ls())
 load(url("http://paulblanche.com/files/acupuncture.rda"))
 head(acupuncture)
 d <- acupuncture # just for convenience
+summary(d) # quick look
 
 # data of each arm
 d1 <- d[d$arm=="placebo",]
@@ -25,7 +26,7 @@ legend("bottomleft",
 ancova <- lm(post~pre+arm,data=d)
 summary(ancova)
 confint(ancova)
-coef(ancova)[1]
+coef(ancova)[3]
 
 # add regression lines of ANCOVA to the previous plot
 abline(a=coef(ancova)[1],b=coef(ancova)[2],col=cols[1],lty=2,lwd=2)
@@ -34,7 +35,10 @@ abline(a=coef(ancova)[1]+coef(ancova)[3],b=coef(ancova)[2],col=cols[2],lty=2,lwd
 
 # t-test on post-treatment score
 t.test(post~arm,data=d)
+mean(d2$post)-mean(d1$post)
+
 
 # t-test on post-treatment change
 d$change <- d$post-d$pre # add change variable to dataset
 t.test(change~arm,data=d)
+mean(d$change[d$arm=="acupuncture"])-mean(d$change[d$arm=="placebo"])

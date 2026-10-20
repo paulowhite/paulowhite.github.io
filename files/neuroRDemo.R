@@ -7,16 +7,16 @@ head(d)
 summary(d)
 mean(d$baseline) #  approximately 10
 
-# center baseline value (makes interpretation easier)
+# We "center" baseline value to make the interpretation easier
 d$baseline <- d$baseline-10
-summary(d)
+summary(d) # check 
 
-library(LMMstar)
+library(LMMstar) 
 # plot the missing data pattern
 MissPat <- summarizeNA(d[,c("baseline","week6","week12")])
 plot(MissPat)
 
-# create data in long format
+# create data in long format. Important to fit the model.
 long <- reshape(d,
                 idvar = "id",
                 timevar="visit",
@@ -25,7 +25,7 @@ long <- reshape(d,
                 direction = "long")
 head(long) # check
 long <- long[order(long$id),] # re-order by patient
-head(long)
+head(long) # check
 
 # relevel as convenient (see slides)
 long$visit <- relevel(as.factor(long$visit),ref="2") 

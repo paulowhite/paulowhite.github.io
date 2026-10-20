@@ -166,7 +166,7 @@ pre code {
 
 <p>For this exercise we will work with the <a href="http://paulblanche.com/files/DataRCTgusto.html">GUSTO-I trial data</a> available from the course webpage. We will perform an analysis of the primary outcome of the trial: 30-day mortality. We will assume that, as often, adjustment for a few baseline covariates has been pre-specified in the statistical analysis plan (Killip class, age, tachycardia, hypotension, infarct location and smoking status). Covariates adjustment is often recommended as it usually leads to power gains, without increasing the risk of type-I error.</p>
 <p>Most (or all) of the code needed for each question is provided. You should mainly focus on the interpretation of the results, but we hope that you can also learn a bit of R coding from the provided R code. Be curious!</p>
-<p>To perform regression standardization, we will use R code (functions) provided in this <a href="http://paulblanche.com/files/HelperRS.R">script</a>, which essentially contain the relevant R code provided in the appendix of Steingrimsson et al (2017), already cited in the course slides. If you have sufficient coding experience, it can be informative to take a look at the code while you wait for the results, at Question 6.</p>
+<p>To perform regression standardization, we will use R code (functions) provided in this <a href="http://paulblanche.com/files/Helpers.R">script</a>, which essentially contain the relevant R code provided in the appendix of Steingrimsson et al (2017), already cited in the course slides. If you have sufficient coding experience, it can be informative to take a look at the code while you wait for the results, at Question 6.</p>
 <div id="question-1" class="section level1">
 <h1>Question 1</h1>
 <p>Read the description of the <a href="http://paulblanche.com/files/DataRCTgusto.html">GUSTO-I trial data</a>. Then load the data and visualize the first lines of the data. The data contains information about many patients. How many exactly?</p>
@@ -182,8 +182,6 @@ nrow(d)</code></pre>
 <li>Are there any noticeable differences?</li>
 <li>Is the sample size approximately the same in the two arms?</li>
 <li>Why does it make sense?</li>
-<li>Just to learn a bit about R coding, run the code below also after replacing <code>Q(age)</code> by <code>age</code>. Observe the difference in the results.</li>
-<li>Similarly, you can modify other parts of the code below, run it, observe the different results and deduce the meaning of the code. That is sometimes the most efficient way to learn and it can complement well the reading of the help page.</li>
 </ul>
 <pre class="r"><code>library(Publish)
 Tab1 &lt;- univariateTable(trt~ Q(age) + tachycardia + hypotension + Killip + MIlocation + smoking,
@@ -191,6 +189,12 @@ Tab1 &lt;- univariateTable(trt~ Q(age) + tachycardia + hypotension + Killip + MI
                         compare.groups = FALSE,
                         show.totals=FALSE)
 summary(Tab1,drop.reference = &quot;binary&quot;)</code></pre>
+<p><strong>Additionally</strong>:</p>
+<ul>
+<li><p>Just to learn a bit about R coding, run the code above also after replacing <code>Q(age)</code> by <code>age</code>. Observe the difference in the results. What's the difference? Which version of the code and corresponding results do you prefer? Why?</p></li>
+<li><p>Similarly, you can modify other parts of the code above, run it, observe the different results and deduce the meaning of some of the specific part of the code. That is sometimes the most efficient way to learn and it can complement well the reading of the help page.</p></li>
+<li><p>In particular, why does it make sense to use <code>compare.groups =  FALSE</code>?</p></li>
+</ul>
 </div>
 <div id="question-3" class="section level1">
 <h1>Question 3</h1>
@@ -199,9 +203,9 @@ summary(Tab1,drop.reference = &quot;binary&quot;)</code></pre>
 <li>Why is that useful?</li>
 <li>What are the main conclusions? Write a conclusion sentence that resembles what is typically seen in an abstract.</li>
 </ul>
-<pre class="r"><code># create 2x2 table of the outcome per arm
+<pre class="r"><code># create 2x2 table to summarize the observed outcomes in each arm
 tabRes &lt;- table(treat=d$trt,death=d$Death30d)
-tabRes
+tabRes 
 tabRes &lt;- tabRes[2:1,2:1] # reorder rows and columns 
 tabRes
 # show estimated risks (proportions) in percent (and round)
@@ -210,8 +214,8 @@ round(prop.table(tabRes,margin=1)*100,2)
 rest2x2 &lt;- table2x2(tabRes,stats=&quot;rd&quot;)
 rest2x2
 # compute unadjusted z value and p-value
-z.unadjusted &lt;- abs(rest2x2$rd/rest2x2$se.rd)
-c(z=z.unadjusted,p=2*(1-pnorm(z.unadjusted)))</code></pre>
+z.unadjusted &lt;- abs(rest2x2$rd/rest2x2$se.rd) # |est. diff / SE|
+c(z=z.unadjusted,p=2*(1-pnorm(z.unadjusted))) # usual two-sided p-value computation</code></pre>
 </div>
 <div id="question-4" class="section level1">
 <h1>Question 4</h1>
@@ -222,8 +226,9 @@ c(z=z.unadjusted,p=2*(1-pnorm(z.unadjusted)))</code></pre>
 <li>we categorize age in groups (5 year span, except for the youngest and oldest groups): [18,40], (40,45], (45,50], (50,55], (55,60], (60,65], (65,70], (70,75], (75,80], (80,85], (85,115].</li>
 <li>we do not model using interaction terms.</li>
 </ul>
-<p>Questions:</p>
+<p><strong>Questions:</strong></p>
 <ul>
+<li>Can you provide/restate the rationale to perform this analysis instead of the unadjusted analysis perfomed at the previous question?</li>
 <li>What are the pros and cons of categorizing age?</li>
 <li>Are you aware of (usually) better alternatives?</li>
 <li>What does it mean, in plain English, that we do not assume that an interaction term between e.g., tachycardia and hypotension, does not exist?</li>
@@ -231,15 +236,16 @@ c(z=z.unadjusted,p=2*(1-pnorm(z.unadjusted)))</code></pre>
 </div>
 <div id="question-5" class="section level1">
 <h1>Question 5</h1>
-<p>Create the categorical variable for age and fit the multiple logistic regression model.</p>
+<p>Create the categorical variable for age and fit the multiple logistic regression model (note: we do not standardize yet, but it will come).</p>
 <ul>
 <li>What is the conditional treatment effect estimate?</li>
-<li>What is its interpretation?</li>
+<li>What is its interpretation? Can you explain it in plain English, e.g., as you could explain it to a lay person?</li>
 <li>Do the p-value and confidence interval suggest the same conclusion as those of the unadjusted analysis?</li>
-<li>Some might argue that the modeling choices are too simple to be true. What could you reply to defend your choices?</li>
-<li>Do you trust the result of the confidence interval as much as that of the p-value?</li>
+<li>Did you expect that? Why?</li>
+<li>Some (e.g., a reviewer) might argue that the modeling choices are too simple and that it leads to modeling assumptions that are unrealistic. What could you reply to defend your choices? (Assuming that the modeling choices described above were yours)</li>
+<li>Do you trust the results for the treatment effect estimate and confidence interval as much as the result for the p-value? Why?</li>
 </ul>
-<pre class="r"><code> # Make age groups (just to keep it simple)
+<pre class="r"><code> # Make age groups
  d$ageC &lt;- cut(d$age, breaks=c(18,seq(from=40,to=85,by=5),115),
                include.lowest=TRUE)
  table(d$ageC,useNA=&quot;always&quot;) # just to check 
@@ -247,38 +253,39 @@ c(z=z.unadjusted,p=2*(1-pnorm(z.unadjusted)))</code></pre>
  fit &lt;- glm(Death30d ~ trt + ageC + tachycardia + hypotension + Killip
             + MIlocation + smoking, data = d, family = &quot;binomial&quot;)
  summary(fit)
- # focus on the main results, first estimate and 95%-CI
+ # focus on the main results.  First on estimate and 95%-CI.
  exp(c(Est=coef(fit)[&quot;trttPA&quot;],
        lower=confint.default(fit)[&quot;trttPA&quot;,1],
        upper=confint.default(fit)[&quot;trttPA&quot;,2]))
- # then p-value    
+ # Then focus on the p-value    
  summary(fit)$coef[&quot;trttPA&quot;,&quot;Pr(&gt;|z|)&quot;] # </code></pre>
 </div>
 <div id="question-6" class="section level1">
 <h1>Question 6</h1>
-<p>Perform the main analysis: regression standardization.</p>
+<p>Perform the main analysis, using regression standardization.</p>
 <ul>
 <li>What is the unconditional treatment effect estimate?</li>
-<li>What is its interpretation?</li>
+<li>What is its interpretation? Can you explain it in plain English, e.g., as you could explain it to a lay person?</li>
 <li>Do the p-value and confidence interval suggest the same conclusion as those of the previous analyses (unadjusted and logistic regression)?</li>
-<li>Again, some might argue that the modeling choices are too simple to be true. What could you reply to defend your choices?</li>
-<li>Do you trust the result of the confidence interval as much as that of the p-value?</li>
+<li>Did you expect that? Why?</li>
+<li>Again, some might argue that the modeling choices are too simple and that it leads to modeling assumptions that are unrealistic. What could you reply to defend your choices?</li>
+<li>Do you trust the results for the treatment effect estimate and confidence interval as much as the result for the p-value? Why?</li>
 </ul>
-<pre class="r"><code># First we source the script with the helper function
+<pre class="r"><code># First we source the script with the helper functions
 # (as mentioned in the introduction above)
-source(&quot;http://paulblanche.com/files/HelperRS.R&quot;)   
-# To use the function, we need two steps of  data management.
-# First, we create a 0/1 variable for the arm
+source(&quot;http://paulblanche.com/files/Helpers.R&quot;)   
+# To use the functions, we need two steps of  data management.
+# First, we create a 0/1 variable for the treatment arm
 d$A &lt;- as.numeric(d$trt==&quot;tPA&quot;)
-#  Second, we select the data for covariate adjustment
+#  Second, we select the data for covariates adjustment
 dAdj &lt;- d[,c(&quot;ageC&quot;,&quot;tachycardia&quot;,&quot;hypotension&quot;,&quot;Killip&quot;,&quot;MIlocation&quot;,&quot;smoking&quot;)]
-# We now use the function to compute estimates
+# We can now use the function to compute relevant estimates (two risks and their difference)
 est &lt;- stand.est(Y=d$Death30d, A=d$A, W=dAdj)
-est # print the results
-# Then we use the function to compute standard error via bootstrapping.
-# We need set the seed for reproducibility. To not wait too long, we use
+est 
+# Then we use the function to compute standard errors via bootstrapping.
+# We need to set the seed for reproducibility. To not wait too long, we use
 # n.boot=400 bootstrapped samples. In practice, use more, e.g., 1000.
-# But,  400 is usually sufficient to provide a reliable SEs.
+# But, 400 is usually sufficient to provide reliable SEs and preliminary analysis.
 set.seed(30102025) 
 Res.var.est &lt;- var.stand.est(Y=d$Death30d, A=d$A, W=dAdj,
                              n.boot=400, Trace=TRUE)
@@ -291,7 +298,7 @@ Res.rs &lt;- c(Est=est[&quot;Diff&quot;],
             upper=est[&quot;Diff&quot;] + qnorm(0.975)*SE.diff,
             p.value=2*(1-pnorm(z)))
 Res.rs
-# to better read, show in % and present only 5 digits for the p-value
+# To better read, show results in % and present only 5 digits for the p-value
 c(paste0(round(Res.rs[1:3]*100,2),&quot;%&quot;),round(Res.rs[4],5))</code></pre>
 </div>
 <div id="question-7" class="section level1">
@@ -304,7 +311,7 @@ odds0 &lt;- est[&quot;risk.0&quot;]/(1-est[&quot;risk.0&quot;])
 OR &lt;- odds1/odds0
 names(OR) &lt;- NULL # just to drop the annoying name
 OR
-# Below is a bit technical. It is to compute the SE
+# the code below is a bit technical. But it is to compute the SE
 # and associated 95%-CI and p-value (using a log-scale
 # transformation, as commonly done)
 Details &lt;- Res.var.est$details
@@ -317,7 +324,7 @@ Res.rs.OR</code></pre>
 </div>
 <div id="question-8" class="section level1">
 <h1>Question 8</h1>
-<p>What about if we had pre-specified to report a risk ratio as the unconditional treatment effect? Can you write the code yourself? Are the results numerically very different? Can you explain why? <strong>Note:</strong> using a log-scale transformation makes sense for the risk ratio too.</p>
+<p>What about if we had pre-specified to report a <strong>risk ratio</strong> as the unconditional treatment effect? Can you write the code yourself? (<strong>Hint:</strong> you do not need to modify the above R code much.) Are the results numerically very different? Can you explain why? <strong>Note:</strong> using a log-scale transformation makes sense for the risk ratio too.</p>
 </div>
 
 

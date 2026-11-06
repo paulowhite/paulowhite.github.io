@@ -1,50 +1,60 @@
 rm(list=ls())
 
-p1 <- 0.17
-p2 <- 0.11
-power <- 0.8
-alpha <- 0.05
-the.n <- 1048/2
-
-
-# reminder
-0.4*0.3 + 0.6*0.075 # 16.5, approx 17%
-0.4*0.2 + 0.6*0.05  # 11%
-
 
 # Question 1
-p2.ITT <- 0.4*(0.2*0.9 + 0.3*0.1) + 0.6*0.05 
-p2.ITT # 11.4% instead of 11%
+
+# load data
+load(url("http://paulblanche.com/files/acupuncture.rda"))
+head(acupuncture)
+d <- acupuncture # just for convenience
+summary(d) # quick look
+
+# data of each arm
+d1 <- d[d$arm=="placebo",]
+d2 <- d[d$arm=="acupuncture",]
+
+# plot data
+cols <- c("blue","red") 
+plot(x=d1$pre,y=d1$post,pch=1,xlim=c(20,100),ylim=c(20,100),
+     xlab="pre-treatment score",ylab="post-treatment score",cex=2,col=cols[1])
+points(x=d2$pre,y=d2$post,pch=4,cex=2,col=cols[2])
+abline(h=c(20,40,60,80,100),col="grey")
+abline(v=c(20,40,60,80,100),col="grey")
+legend("bottomleft",
+       pch=rev(c(1,4)),
+       col=rev(cols),
+       legend=rev(c("Placebo","Acupuncture")),bg="white")
+
+# ancova analysis
+ancova <- lm(post~pre+arm,data=d)
+summary(ancova)
+confint(ancova)
+coef(ancova)[3]
+
+# add regression lines of ANCOVA to the previous plot
+abline(a=coef(ancova)[1],b=coef(ancova)[2],col=cols[1],lty=2,lwd=2)
+abline(a=coef(ancova)[1]+coef(ancova)[3],b=coef(ancova)[2],col=cols[2],lty=2,lwd=2)
+
+
+# t-test on post-treatment score
+t.test(post~arm,data=d)
+mean(d2$post)-mean(d1$post)
+
+
+# t-test on post-treatment change
+d$change <- d$post-d$pre # add change variable to dataset
+t.test(change~arm,data=d)
+mean(d$change[d$arm=="acupuncture"])-mean(d$change[d$arm=="placebo"])
+
 
 # Question 2
-# Reminder: compute power under perfect adherence
-pbar <- (p1 + p2)/2
-delta <- p1-p2
-SE <- sqrt(2*pbar*(1-pbar)/the.n) # Compute standard error
-pnorm( delta/SE - 1.96)  # 80%           
-
-# Power with nonadherence and ITT
-pbar.ITT <- (p1 + p2.ITT)/2
-delta.ITT <- p1-p2.ITT
-SE.ITT <- sqrt(2*pbar.ITT*(1-pbar.ITT)/the.n) # Compute standard error
-pnorm( delta.ITT/SE.ITT - 1.96)   # 74%
-
-# check 
-power.prop.test(p1=p1,
-                p2=p2.ITT,
-                sig.level=alpha,
-                n=the.n)
+# No it should not matter: same interpretation.
 
 # Question 3
-# E(Z) principle formula
-the.n.ITT <- (1.96 + 0.84)^2*(2*pbar.ITT*(1-pbar.ITT))/(p1-p2.ITT)^2
-the.n.ITT  # 609 per arm (524 before)
+ancova.change <- lm(change~pre+arm,data=d)
+summary(ancova.change)
 
-# check using power.prop.test()
-ceiling(power.prop.test(p1=p1,
-                        p2=p2.ITT,
-                        sig.level=alpha,
-                        power=power)$n)
-
-# Question 4
-(2*(the.n.ITT-the.n)/130)*12 # approx 16 months
+# comparison between results
+summary(ancova)$coef["armacupuncture",]
+summary(ancova.change)$coef["armacupuncture",]
+# We observe the exact same results!

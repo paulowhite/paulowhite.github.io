@@ -1,22 +1,49 @@
 rm(list=ls())
 
-# Scenarion A
-# The first p-value is above 5%. We reject none !
+# Question 1
 
-# Scenarion B
-# We reject all those of steps 1-5. Indeed, for step 1-3, they are all below 5%.
-# For Step 4 and 5, they are below 5/3=1.667. For step 6, the significance level
-# is 5/4=1.25%. Hence reject only two of the four (Koos pain score and EQ5D pain score)
+mean1 <- 10 # mean reduction under treatment A=1 with perfect adherence
+mean0 <- 22 # mean reduction under treatment A=0 with perfect adherence
+pNA <- 0.3  # probability of nonadherence
 
-# Scenarion C
-# We reject at steps 1-3, as they are all below 5%. At step 4, we fail to reject
-# for Range of Movement  at t=24 months, as p=3.2% > 5%/3 = 1.667%. At step 5, the
-# significance level is therefore 5%*(2/3)=3.33%. We are allowed to keep testing
-# because at least one was significant at step 4, but no longer with full alpha at 5%.
-# Because of Bonferroni, we compare the p-values to 5%*(2/3)/3=1.11%. So we can reject
-# all at step 5, although it was borderline for SF36 bodily pain score. At step 6, the  
-# significance level is therefore still 3.33%, as 5%*(2/3)*(3/3)=3.33%. As all were
-# significant at step 5, the significance level stays unchanged. Because of Bonferroni,
-# we compare the p-values to 5%*(2/3)/4=0.83%. Hence, 2 are still significant
-# (KOOS pain score, p=0.1% and EQ5D pain score, p=0.6%) but 2 are not (SF36 vitality
-# score, p=1.5% and UCLA activity scale, p=40%).
+mean1*(1-pNA) # 7
+mean0*(1-pNA) # 15.4 (we could round to 15)
+
+# Question 2
+diff.perfect.adherence <- mean1 - mean0 
+diff.perfect.adherence # difference under perfect adherence
+
+diff.ITT.nonadherence <- mean1*(1-pNA) - mean0*(1-pNA)
+diff.ITT.nonadherence # difference under nonadherence, using ITT
+# Rk: we assumed no reduction if no treatment taken, or alternatively,
+# same reduction in the two arms (e.g., regression to the mean)
+
+# Question 3
+NImargin <- 10
+diff.perfect.adherence + NImargin # -2: negative
+diff.ITT.nonadherence + NImargin  # 1.6: positive
+
+# E(Z)=(delta-delta_0)/SE. If E(Z)>0, then type-I error is larger
+# than 2*pnorm( - 1.96), hence larger than 5%, e.g. if E(Z)=1,
+2*pnorm( 1 - 1.96) # 33%
+# If E(Z)<0, then type-I error is smallter than
+#  2*pnorm( - 1.96), hence larger than 5%, e.g. if E(Z)=-1,
+2*pnorm( -1 - 1.96) # 0.3%
+# ITT with nonadherence here leads to E(Z)>0, hence type-I error > 5%.
+
+# Question 4
+# E(Z)=2.8 if 80% power, and E(Z)=(delta + delta0)/SE, where SE depends (only) on the standard
+# deviation of the outcome and sample size (SE=sigma*\sqrt{2/n}, see lecture 1); so
+# we can reasonably expect that SE is about the same whether the treatments
+# are equally efficacious or not. If they are equally efficacious, the mean difference
+# is delta=0. Hence, delta0/SE=2.8, hence SE=delta0/2.8=10/2.8=3.57. If the difference
+# is not 0, but instead -8.4 (diff.ITT.nonadherence), then  EZ=(-8.4 + 10)/3.57=1.6/3.57=0.448
+# and
+2*pnorm(0.448-1.96) # 13% Type-I error, RK: we multiply by 2 because 2-sided p-values
+# Another look at it (equivalent, more details):
+EZ.adherence <- (diff.perfect.adherence + NImargin)/(10/2.8)
+EZ.nonadherence <- (diff.ITT.nonadherence + NImargin)/(10/2.8)
+EZ.nodiff <- 0
+2*pnorm(EZ.nodiff-1.96)    # 5% Type-I error if difference = NI-margin (e.g., 20 vs 10, perfect adherence)
+2*pnorm(EZ.adherence-1.96) # 1% < 5% Type-I error if difference > NI-margin (e.g., 22 vs 10, perfect adherence)
+2*pnorm(EZ.nonadherence-1.96) #13% > 5%   Type-I error if difference > NI-margin (e.g., 22 vs 10, with noadherence)

@@ -28,7 +28,7 @@ for(i in 1:nrow(AllCases)){
     ProbCase[i] <- dbinom(x=x1,size=n1,prob=1-p1)*dbinom(x=x2,size=n2,prob=1-p2)
 }
 # Probability of possible cases covered by our computation (we ignore many
-# some rare cases, e.g., x1=x2=50...).
+# rare cases, e.g., x1=x2=50...).
 sum(ProbCase)
 # }}}
 
